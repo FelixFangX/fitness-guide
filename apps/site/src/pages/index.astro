@@ -11,6 +11,10 @@ const featured = featuredNames
   .filter((exercise): exercise is (typeof exercises)[number] => Boolean(exercise));
 const previews = featured.length === 3 ? featured : exercises.slice(0, 3);
 const installCommand = 'npm install @bryllim/workout-guide';
+const quickStart = `import { searchExercises, getAssetUrl } from '@bryllim/workout-guide';
+
+const [pushUp] = searchExercises('push up');
+const frame = getAssetUrl(pushUp.slug, 1);`;
 ---
 
 <BaseLayout
@@ -19,20 +23,23 @@ const installCommand = 'npm install @bryllim/workout-guide';
 >
   <section class="hero page-shell" aria-labelledby="hero-title">
     <div class="hero-copy">
-      <p class="eyebrow stagger-item">Open exercise library</p>
-      <h1 class="stagger-item" id="hero-title">Movement, clearly framed.</h1>
-      <p class="stagger-item">Three consistent, transparent frames for 302 exercises—ready for web, native, and anything you build next.</p>
+      <p class="eyebrow stagger-item">npm package · v1.0.0</p>
+      <h1 class="stagger-item" id="hero-title">Exercise assets, ready to ship.</h1>
+      <p class="stagger-item">A typed, framework-neutral API for 302 exercises and 906 transparent frames. Built for web, React Native, and anything JavaScript.</p>
       <div class="stagger-item">
         <div class="hero-actions">
-          <a class="action-link focus-shell" href={withBase('exercises/')}><span class="button-surface button-surface-dark" data-squircle data-radius="18">Browse exercises</span></a>
-          <a class="action-link focus-shell" href={withBase('guide/')}><span class="button-surface button-surface-light" data-squircle data-radius="18">Integration guide</span></a>
+          <a class="action-link focus-shell" href={withBase('guide/')}><span class="button-surface button-surface-dark" data-squircle data-radius="18">Read the docs</span></a>
+          <a class="action-link focus-shell" href={withBase('exercises/')}><span class="button-surface button-surface-light" data-squircle data-radius="18">Explore assets</span></a>
         </div>
-        <div class="install-pill" data-squircle data-radius="24"><code>{installCommand}</code><CopyButton text={installCommand} /></div>
       </div>
     </div>
-    <div class="hero-visual" aria-label="Three sample exercise frames">
-      <div class="hero-panel" data-squircle data-radius="72"></div>
-      {previews.map((exercise) => <div class="hero-frame" data-squircle data-radius="48"><img src={frameUrl(exercise.slug, 1)} alt={`${exercise.name} illustration`} width="512" height="512" /></div>)}
+    <div class="developer-panel" data-squircle data-radius="32">
+      <div class="developer-panel-label"><span>Quick start</span><span>TypeScript</span></div>
+      <div class="install-pill" data-squircle data-radius="18"><code>{installCommand}</code><CopyButton text={installCommand} /></div>
+      <pre><code>{quickStart}</code></pre>
+      <div class="developer-previews" aria-label="Sample exercise assets">
+        {previews.map((exercise) => <a href={withBase(`exercises/${exercise.slug}/`)} aria-label={`View ${exercise.name}`}><img src={frameUrl(exercise.slug, 1)} alt="" width="512" height="512" loading="eager" /></a>)}
+      </div>
     </div>
   </section>
 
@@ -43,12 +50,12 @@ const installCommand = 'npm install @bryllim/workout-guide';
   </section>
 
   <section class="section page-shell" aria-labelledby="featured-title">
-    <div class="section-heading"><div><p class="eyebrow">A consistent visual system</p><h2 id="featured-title">Built to move together.</h2></div><a href={withBase('exercises/')}>View all 302</a></div>
+    <div class="section-heading"><div><p class="eyebrow">Featured assets</p><h2 id="featured-title">Consistent by default.</h2></div><a href={withBase('exercises/')}>View all 302</a></div>
     <div class="preview-grid">{previews.map((exercise) => <ExerciseCard exercise={exercise} />)}</div>
   </section>
 
   <section class="section page-shell" aria-labelledby="benefits-title">
-    <div class="section-heading"><div><p class="eyebrow">One small dependency</p><h2 id="benefits-title">Use the assets your way.</h2></div><p>Framework-neutral metadata and files, with no runtime UI opinions.</p></div>
+    <div class="section-heading"><div><p class="eyebrow">Package primitives</p><h2 id="benefits-title">Use only what you need.</h2></div><p>Framework-neutral metadata and files, with no runtime UI opinions.</p></div>
     <div class="feature-grid">
       <article class="feature-card" data-squircle data-radius="32"><span class="feature-number">01</span><h3>Predictable assets</h3><p>Every exercise has exactly three ordered, transparent 512 × 512 PNG frames.</p></article>
       <article class="feature-card" data-squircle data-radius="32"><span class="feature-number">02</span><h3>Useful metadata</h3><p>Search and filter by name, equipment, muscles, exercise type, and stretch status.</p></article>
@@ -58,7 +65,7 @@ const installCommand = 'npm install @bryllim/workout-guide';
 
   <section class="section page-shell" aria-labelledby="cta-title">
     <div class="cta-surface" data-squircle data-radius="52">
-      <p class="eyebrow">MIT code · CC BY-SA 4.0 assets</p><h2 id="cta-title">Open by design.</h2><p>Explore the source, ship the frames, and help the library get better.</p>
+      <div><p class="eyebrow">MIT code · CC BY-SA 4.0 assets</p><h2 id="cta-title">Open by design.</h2><p>Explore the source, ship the frames, and help the library get better.</p></div>
       <div class="section-actions"><a class="action-link focus-shell" href="https://github.com/bryllim/workout-guide"><span class="button-surface button-surface-light" data-squircle data-radius="18">View on GitHub</span></a><a class="action-link focus-shell" href="https://www.npmjs.com/package/@bryllim/workout-guide"><span class="button-surface button-surface-light" data-squircle data-radius="18">Open npm</span></a></div>
     </div>
   </section>

@@ -10,9 +10,9 @@
   --focus: #f4f4ef;
   --page: 1180px;
   --gutter: clamp(1rem, 4vw, 3rem);
-  --space-section: clamp(3.5rem, 7vw, 6rem);
-  --text-display: clamp(2.9rem, 7vw, 6.4rem);
-  --text-title: clamp(2.15rem, 4.5vw, 4rem);
+  --space-section: clamp(2.75rem, 5vw, 4.5rem);
+  --text-display: clamp(2.65rem, 5.5vw, 5rem);
+  --text-title: clamp(2rem, 3.5vw, 3.25rem);
   --text-heading: clamp(1.5rem, 2.4vw, 2.1rem);
   --shadow-soft: 0 18px 60px rgb(0 0 0 / 0.3);
 }
@@ -235,25 +235,25 @@ nav a:hover,
 
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.06fr) minmax(22rem, 0.94fr);
+  grid-template-columns: minmax(0, 0.9fr) minmax(28rem, 1.1fr);
   align-items: center;
-  gap: clamp(3rem, 8vw, 8rem);
+  gap: clamp(2rem, 5vw, 5rem);
   min-height: auto;
-  padding-block: clamp(3.5rem, 7vw, 5.5rem);
+  padding-block: clamp(2.75rem, 5vw, 4.5rem);
 }
 
 .hero-copy h1 {
-  max-width: 9ch;
-  margin-block-end: 1.25rem;
+  max-width: 11ch;
+  margin-block-end: 1rem;
   font-size: var(--text-display);
   font-weight: 720;
 }
 
 .hero-copy > p:not(.eyebrow) {
   max-width: 56ch;
-  margin-block-end: 1.5rem;
+  margin-block-end: 1.25rem;
   color: var(--muted);
-  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
 }
 
 .hero-actions,
@@ -307,12 +307,12 @@ nav a:hover,
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  max-width: 32rem;
-  min-height: 4rem;
-  margin-block-start: 1.25rem;
-  padding: 0.45rem 0.45rem 0.45rem 1.25rem;
-  background: var(--surface);
-  border-radius: 1.5rem;
+  width: 100%;
+  min-height: 3.5rem;
+  margin-block-start: 0;
+  padding: 0.35rem 0.35rem 0.35rem 1rem;
+  background: var(--surface-strong);
+  border-radius: 1.15rem;
   corner-shape: squircle;
 }
 
@@ -324,56 +324,61 @@ nav a:hover,
   min-height: 3.1rem;
 }
 
-.hero-visual {
-  position: relative;
-  min-height: min(30rem, 52vw);
-}
-
-.hero-panel {
-  position: absolute;
-  inset: 5% 0 5% 8%;
+.developer-panel {
+  padding: 1rem;
   background: var(--surface);
-  border-radius: 3.75rem;
+  border-radius: 2rem;
   corner-shape: squircle;
   box-shadow: var(--shadow-soft);
 }
 
-.hero-frame {
-  position: absolute;
-  display: grid;
-  width: min(56%, 17rem);
-  aspect-ratio: 1;
-  place-items: center;
-  padding: 1.25rem;
-  background: var(--surface-strong);
-  border-radius: 2.5rem;
+.developer-panel-label {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.15rem 0.25rem 0.85rem;
+  color: var(--muted);
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.developer-panel pre {
+  min-height: 8.5rem;
+  margin: 0.75rem 0;
+  padding: 1rem;
+  overflow-x: auto;
+  background: var(--stage);
+  border-radius: 1.15rem;
   corner-shape: squircle;
-  box-shadow: 0 20px 70px rgb(0 0 0 / 0.24);
+  color: #d8d8d2;
+  font-size: 0.76rem;
+  line-height: 1.65;
 }
 
-.hero-frame img {
-  width: 100%;
-  height: 100%;
+.developer-panel pre code {
+  font: inherit;
+}
+
+.developer-previews {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.developer-previews a {
+  display: grid;
+  aspect-ratio: 1.6;
+  place-items: center;
+  overflow: hidden;
+  background: var(--stage);
+  border-radius: 1rem;
+  corner-shape: squircle;
+}
+
+.developer-previews img {
+  width: 72%;
+  height: 72%;
   object-fit: contain;
-}
-
-.hero-frame:nth-child(2) {
-  inset-block-start: 2%;
-  inset-inline-end: 6%;
-  rotate: 4deg;
-}
-
-.hero-frame:nth-child(3) {
-  inset-block-end: 1%;
-  inset-inline-start: 0;
-  rotate: -5deg;
-}
-
-.hero-frame:nth-child(4) {
-  inset-block-end: 12%;
-  inset-inline-end: 0;
-  width: min(42%, 15rem);
-  rotate: 2deg;
 }
 
 .stagger-item {
@@ -405,14 +410,14 @@ nav a:hover,
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
-  padding-block: clamp(2.5rem, 5vw, 4rem);
+  padding-block: 1rem var(--space-section);
 }
 
 .stat-card,
 .feature-card,
 .guide-card,
 .metadata-card {
-  padding: clamp(1.35rem, 3vw, 2rem);
+  padding: clamp(1.1rem, 2vw, 1.5rem);
   background: var(--surface);
   border-radius: 2rem;
   corner-shape: squircle;
@@ -421,7 +426,7 @@ nav a:hover,
 .stat-value {
   display: block;
   margin-block-end: 0.25rem;
-  font-size: clamp(2.25rem, 4.5vw, 3.8rem);
+  font-size: clamp(2rem, 3.5vw, 3rem);
   font-variant-numeric: tabular-nums;
   font-weight: 720;
   letter-spacing: -0.06em;
@@ -444,7 +449,7 @@ nav a:hover,
   align-items: end;
   justify-content: space-between;
   gap: 2rem;
-  margin-block-end: 2rem;
+  margin-block-end: 1.5rem;
 }
 
 .section-heading h2,
@@ -468,7 +473,7 @@ nav a:hover,
 }
 
 .feature-card h3 {
-  margin-block: 1.75rem 0.65rem;
+  margin-block: 1.25rem 0.5rem;
   font-size: 1.35rem;
 }
 
@@ -484,7 +489,11 @@ nav a:hover,
 }
 
 .cta-surface {
-  padding: clamp(2rem, 5vw, 3.75rem);
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: clamp(1.75rem, 3vw, 2.5rem);
   background: var(--stage);
   color: var(--white);
   border-radius: 3.25rem;
@@ -507,7 +516,8 @@ nav a:hover,
 }
 
 .cta-surface .section-actions {
-  margin-block-start: 2rem;
+  flex: none;
+  margin-block-start: 0;
 }
 
 .preview-grid,
@@ -862,10 +872,6 @@ nav a:hover,
     max-width: 9ch;
   }
 
-  .hero-visual {
-    min-height: 34rem;
-  }
-
   .filter-panel {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -890,29 +896,46 @@ nav a:hover,
   }
 
   .hero {
-    padding-block-start: 3rem;
+    padding-block-start: 2.25rem;
   }
 
   .hero-copy h1 {
-    font-size: clamp(2.9rem, 15vw, 4.5rem);
+    font-size: clamp(2.6rem, 12vw, 3.8rem);
   }
 
-  .hero-visual {
-    min-height: 22rem;
-  }
-
-  .hero-panel {
-    border-radius: 3rem;
-  }
-
-  .stats,
   .feature-grid,
-  .preview-grid,
   .exercise-grid,
   .frame-grid,
   .metadata-grid,
   .filter-panel {
     grid-template-columns: 1fr;
+  }
+
+  .stats {
+    gap: 0.5rem;
+  }
+
+  .stat-card {
+    padding: 1rem 0.85rem;
+  }
+
+  .stat-value {
+    font-size: clamp(1.8rem, 9vw, 2.4rem);
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+  }
+
+  .preview-grid {
+    grid-template-columns: repeat(3, minmax(10.5rem, 1fr));
+    overflow-x: auto;
+    padding-block-end: 0.5rem;
+    scroll-snap-type: x proximity;
+  }
+
+  .preview-grid .exercise-card {
+    scroll-snap-align: start;
   }
 
   .section-heading {
@@ -921,9 +944,20 @@ nav a:hover,
   }
 
   .install-pill {
-    align-items: stretch;
+    gap: 0.5rem;
+    padding-inline-start: 0.8rem;
+  }
+
+  .install-pill code {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cta-surface {
+    align-items: flex-start;
     flex-direction: column;
-    padding: 1rem;
   }
 
   .site-footer {

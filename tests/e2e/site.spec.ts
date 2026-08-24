@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test';
 test('landing page presents the package and has no detectable accessibility violations', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('./');
-  await expect(page.getByRole('heading', { name: 'Movement, clearly framed.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Exercise assets, ready to ship.' })).toBeVisible();
   await expect(page.getByText('302', { exact: true })).toBeVisible();
   await expect(page.locator('img').first()).toHaveAttribute('width', '512');
   const results = await new AxeBuilder({ page }).analyze();
