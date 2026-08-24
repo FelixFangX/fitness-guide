@@ -1,20 +1,20 @@
 :root {
-  color-scheme: light;
-  --ink: #171717;
-  --muted: #686866;
-  --paper: #f5f5f2;
-  --surface: #ebebe7;
-  --surface-strong: #dfdfda;
-  --stage: #1c1c1c;
+  color-scheme: dark;
+  --ink: #f4f4ef;
+  --muted: #aaa9a4;
+  --paper: #101010;
+  --surface: #1a1a1a;
+  --surface-strong: #272727;
+  --stage: #080808;
   --white: #ffffff;
-  --focus: #171717;
+  --focus: #f4f4ef;
   --page: 1180px;
   --gutter: clamp(1rem, 4vw, 3rem);
-  --space-section: clamp(5rem, 11vw, 9rem);
-  --text-display: clamp(3.45rem, 10vw, 8.8rem);
-  --text-title: clamp(2.4rem, 6vw, 5.5rem);
-  --text-heading: clamp(1.6rem, 3vw, 2.4rem);
-  --shadow-soft: 0 18px 60px rgb(0 0 0 / 0.07);
+  --space-section: clamp(3.5rem, 7vw, 6rem);
+  --text-display: clamp(2.9rem, 7vw, 6.4rem);
+  --text-title: clamp(2.15rem, 4.5vw, 4rem);
+  --text-heading: clamp(1.5rem, 2.4vw, 2.1rem);
+  --shadow-soft: 0 18px 60px rgb(0 0 0 / 0.3);
 }
 
 *,
@@ -93,7 +93,7 @@ code {
 
 ::selection {
   background: var(--ink);
-  color: var(--white);
+  color: var(--paper);
 }
 
 [hidden] {
@@ -118,7 +118,7 @@ code {
   z-index: 100;
   padding: 0.75rem 1rem;
   background: var(--ink);
-  color: var(--white);
+  color: var(--paper);
   border-radius: 0.75rem;
   transform: translateY(-180%);
 }
@@ -154,7 +154,7 @@ select:focus-visible {
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
-  min-height: 5.5rem;
+  min-height: 4.5rem;
 }
 
 .brand {
@@ -172,7 +172,7 @@ select:focus-visible {
   height: 2.25rem;
   place-items: center;
   background: var(--ink);
-  color: var(--white);
+  color: var(--paper);
   border-radius: 0.7rem;
   corner-shape: squircle;
   font-size: 0.7rem;
@@ -205,7 +205,7 @@ nav a:hover,
   grid-template-columns: 1fr auto auto;
   align-items: end;
   gap: 3rem;
-  padding-block: 5rem 3rem;
+  padding-block: 3.5rem 2.5rem;
   color: var(--muted);
   font-size: 0.92rem;
 }
@@ -238,20 +238,20 @@ nav a:hover,
   grid-template-columns: minmax(0, 1.06fr) minmax(22rem, 0.94fr);
   align-items: center;
   gap: clamp(3rem, 8vw, 8rem);
-  min-height: calc(100svh - 5.5rem);
-  padding-block: 4rem 7rem;
+  min-height: auto;
+  padding-block: clamp(3.5rem, 7vw, 5.5rem);
 }
 
 .hero-copy h1 {
-  max-width: 8ch;
-  margin-block-end: 1.75rem;
+  max-width: 9ch;
+  margin-block-end: 1.25rem;
   font-size: var(--text-display);
   font-weight: 720;
 }
 
 .hero-copy > p:not(.eyebrow) {
   max-width: 56ch;
-  margin-block-end: 2rem;
+  margin-block-end: 1.5rem;
   color: var(--muted);
   font-size: clamp(1.05rem, 2vw, 1.25rem);
 }
@@ -294,7 +294,7 @@ nav a:hover,
 
 .button-surface-dark {
   background: var(--ink);
-  color: var(--white);
+  color: var(--paper);
 }
 
 .button-surface-light {
@@ -326,14 +326,14 @@ nav a:hover,
 
 .hero-visual {
   position: relative;
-  min-height: min(38rem, 65vw);
+  min-height: min(30rem, 52vw);
 }
 
 .hero-panel {
   position: absolute;
   inset: 5% 0 5% 8%;
-  background: var(--stage);
-  border-radius: 4.5rem;
+  background: var(--surface);
+  border-radius: 3.75rem;
   corner-shape: squircle;
   box-shadow: var(--shadow-soft);
 }
@@ -341,12 +341,12 @@ nav a:hover,
 .hero-frame {
   position: absolute;
   display: grid;
-  width: min(58%, 20rem);
+  width: min(56%, 17rem);
   aspect-ratio: 1;
   place-items: center;
   padding: 1.25rem;
-  background: #282828;
-  border-radius: 3rem;
+  background: var(--surface-strong);
+  border-radius: 2.5rem;
   corner-shape: squircle;
   box-shadow: 0 20px 70px rgb(0 0 0 / 0.24);
 }
@@ -405,14 +405,14 @@ nav a:hover,
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
-  padding-block: var(--space-section);
+  padding-block: clamp(2.5rem, 5vw, 4rem);
 }
 
 .stat-card,
 .feature-card,
 .guide-card,
 .metadata-card {
-  padding: clamp(1.5rem, 4vw, 2.5rem);
+  padding: clamp(1.35rem, 3vw, 2rem);
   background: var(--surface);
   border-radius: 2rem;
   corner-shape: squircle;
@@ -421,7 +421,7 @@ nav a:hover,
 .stat-value {
   display: block;
   margin-block-end: 0.25rem;
-  font-size: clamp(2.6rem, 6vw, 5rem);
+  font-size: clamp(2.25rem, 4.5vw, 3.8rem);
   font-variant-numeric: tabular-nums;
   font-weight: 720;
   letter-spacing: -0.06em;
@@ -444,7 +444,7 @@ nav a:hover,
   align-items: end;
   justify-content: space-between;
   gap: 2rem;
-  margin-block-end: 3rem;
+  margin-block-end: 2rem;
 }
 
 .section-heading h2,
@@ -468,7 +468,7 @@ nav a:hover,
 }
 
 .feature-card h3 {
-  margin-block: 2.5rem 0.75rem;
+  margin-block: 1.75rem 0.65rem;
   font-size: 1.35rem;
 }
 
@@ -484,7 +484,7 @@ nav a:hover,
 }
 
 .cta-surface {
-  padding: clamp(2rem, 7vw, 5rem);
+  padding: clamp(2rem, 5vw, 3.75rem);
   background: var(--stage);
   color: var(--white);
   border-radius: 3.25rem;
@@ -583,7 +583,7 @@ nav a:hover,
   grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
   align-items: end;
   gap: 3rem;
-  padding-block: clamp(5rem, 10vw, 9rem) 4rem;
+  padding-block: clamp(3.5rem, 7vw, 6rem) 2.5rem;
 }
 
 .filter-panel {
@@ -890,15 +890,15 @@ nav a:hover,
   }
 
   .hero {
-    padding-block-start: 4.5rem;
+    padding-block-start: 3rem;
   }
 
   .hero-copy h1 {
-    font-size: clamp(3.25rem, 19vw, 5.4rem);
+    font-size: clamp(2.9rem, 15vw, 4.5rem);
   }
 
   .hero-visual {
-    min-height: 26rem;
+    min-height: 22rem;
   }
 
   .hero-panel {
