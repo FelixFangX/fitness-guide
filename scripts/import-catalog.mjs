@@ -8,7 +8,11 @@ import sharp from 'sharp';
 import ts from 'typescript';
 
 const projectRoot = resolve(dirname(new URL(import.meta.url).pathname), '..');
-const sourceRoot = resolve(process.argv[2] ?? join(projectRoot, '..', 'kabi'));
+const sourceArgument = process.argv[2];
+if (!sourceArgument) {
+  throw new Error('Provide the path to a compatible exercise source export.');
+}
+const sourceRoot = resolve(sourceArgument);
 const packageRoot = join(projectRoot, 'packages', 'workout-guide');
 const outputAssets = join(packageRoot, 'assets');
 
@@ -18,7 +22,7 @@ const sourceAssets = join(sourceRoot, 'assets', 'images', 'exercises');
 
 for (const requiredPath of [exerciseLibraryPath, poseAssetsPath, sourceAssets]) {
   if (!existsSync(requiredPath)) {
-    throw new Error(`Kabi source is incomplete: ${requiredPath}`);
+    throw new Error(`Exercise source is incomplete: ${requiredPath}`);
   }
 }
 
@@ -28,7 +32,7 @@ function extractExerciseDefinitions(source) {
   const start = source.indexOf('[', markerIndex);
   const end = source.indexOf('\n];', start);
   if (markerIndex < 0 || start < 0 || end < 0) {
-    throw new Error('Could not locate SEEDED_EXERCISES in Kabi.');
+    throw new Error('Could not locate SEEDED_EXERCISES in the exercise source.');
   }
   return Function(`"use strict"; return (${source.slice(start, end + 2)});`)();
 }

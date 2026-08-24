@@ -1,13 +1,11 @@
 # Attribution
 
-Workout Guide is created and maintained by [Bryl Lim](https://bryllim.com).
-
-Exercise frames are made and curated for Workout Guide by Bryl Lim and are
-available under CC BY-SA 4.0.
-
-Seventy-six first-pose frames are rasterized adaptations of artwork from
+The original pose artwork used by Workout Guide comes from
 [Everkinetic](https://github.com/everkinetic/data), licensed under
-[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The source
-artwork was placed on a transparent 512 × 512 canvas, recolored for monochrome
-display, and exported as optimized PNG. Exact source URLs are retained in
-`packages/workout-guide/manifest.json`.
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
+[Bryl Lim](https://bryllim.com) expanded upon that foundation with additional
+exercises and animation frames, normalized transparent 512 × 512 assets,
+structured metadata, package APIs, and the documentation gallery. Seventy-six
+first-pose frames are direct rasterized adaptations of Everkinetic SVGs; their
+exact source URLs and recorded changes are retained in `manifest.json`.

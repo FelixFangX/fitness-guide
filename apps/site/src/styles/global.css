@@ -157,6 +157,10 @@ select:focus-visible {
   min-height: 4.5rem;
 }
 
+.nav-shell-end {
+  justify-content: flex-end;
+}
+
 .brand {
   display: inline-flex;
   align-items: center;

@@ -1,6 +1,8 @@
 # Workout Guide
 
-An open exercise illustration library created by [Bryl Lim](https://bryllim.com). It contains 302 exercises, three consistent frames per exercise, a typed framework-neutral npm package, and a searchable static gallery.
+An open exercise illustration library containing 302 exercises, three consistent frames per exercise, a typed framework-neutral npm package, and a searchable static gallery.
+
+The original pose artwork used by this project comes from [Everkinetic](https://github.com/everkinetic/data) under CC BY-SA 4.0. [Bryl Lim](https://bryllim.com) expanded upon that foundation with additional exercises and animation frames, normalized assets, structured metadata, package APIs, and the documentation gallery.
 
 [Browse the gallery](https://bryllim.github.io/workout-guide/) · [Read the guide](https://bryllim.github.io/workout-guide/guide/) · [Open the package on npm](https://www.npmjs.com/package/@bryllim/workout-guide)
 
@@ -32,12 +34,11 @@ Run the project locally:
 
 ```sh
 npm install
-npm run catalog:import
 npm run check
 npm run dev
 ```
 
-The importer reads the adjacent Kabi source repository only when regenerating the catalog. Published consumers do not depend on Kabi.
+The normalized catalog and all package assets are checked into the repository. Maintainers can regenerate them from a compatible source export with `npm run catalog:import -- /path/to/source`.
 
 ## Licensing
 

@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "npm run build -w @bryllim/workout-guide && npm run build -w workout-guide-site",
-    "catalog:import": "node scripts/import-kabi.mjs ../kabi",
+    "catalog:import": "node scripts/import-catalog.mjs",
     "catalog:validate": "node scripts/validate-catalog.mjs",
     "check": "npm run catalog:validate && npm run typecheck && npm run lint && npm test && npm run build",
     "dev": "npm run dev -w workout-guide-site",

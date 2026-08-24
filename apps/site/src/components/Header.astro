@@ -1,13 +1,19 @@
 ---
 import { withBase } from '../lib/paths';
+
+type Props = {
+  showBrand?: boolean;
+};
+
+const { showBrand = true } = Astro.props;
 ---
 
 <header class="site-header">
-  <div class="nav-shell page-shell">
-    <a class="brand" href={withBase()} aria-label="Workout Guide home">
+  <div class:list={["nav-shell", "page-shell", { "nav-shell-end": !showBrand }]}>
+    {showBrand && <a class="brand" href={withBase()} aria-label="Workout Guide home">
       <span class="brand-mark" data-squircle data-radius="11" aria-hidden="true">WG</span>
       <span>Workout Guide</span>
-    </a>
+    </a>}
     <nav aria-label="Primary navigation">
       <a href={withBase('exercises/')}>Exercises</a>
       <a href={withBase('guide/')}>Guide</a>
