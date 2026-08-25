@@ -6,12 +6,13 @@
   --surface: #1a1a1a;
   --surface-strong: #272727;
   --stage: #080808;
+  --card-gradient: linear-gradient(to bottom, rgb(0 0 0 / 0) 0%, #000 82%, #000 100%);
   --white: #ffffff;
   --focus: #f4f4ef;
-  --page: 1180px;
+  --page: 1040px;
   --gutter: clamp(1rem, 4vw, 3rem);
   --space-section: clamp(2.75rem, 5vw, 4.5rem);
-  --text-display: clamp(2.65rem, 5.5vw, 5rem);
+  --text-display: clamp(2.25rem, 3.8vw, 3.5rem);
   --text-title: clamp(2rem, 3.5vw, 3.25rem);
   --text-heading: clamp(1.5rem, 2.4vw, 2.1rem);
   --shadow-soft: 0 18px 60px rgb(0 0 0 / 0.3);
@@ -157,31 +158,12 @@ select:focus-visible {
   min-height: 4.5rem;
 }
 
-.nav-shell-end {
-  justify-content: flex-end;
-}
-
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
   min-height: 44px;
   font-weight: 680;
   text-decoration: none;
-}
-
-.brand-mark {
-  display: grid;
-  width: 2.25rem;
-  height: 2.25rem;
-  place-items: center;
-  background: var(--ink);
-  color: var(--paper);
-  border-radius: 0.7rem;
-  corner-shape: squircle;
-  font-size: 0.7rem;
-  font-weight: 760;
-  letter-spacing: -0.03em;
 }
 
 nav {
@@ -253,11 +235,53 @@ nav a:hover,
   font-weight: 720;
 }
 
-.hero-copy > p:not(.eyebrow) {
+.hero-copy > p:not(.eyebrow):not(.hero-creator) {
   max-width: 56ch;
   margin-block-end: 1.25rem;
   color: var(--muted);
   font-size: clamp(1rem, 1.5vw, 1.12rem);
+}
+
+.hero-creator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-block-end: 1.5rem;
+  padding: 0.75rem 0.9rem;
+  background: var(--surface);
+  border-radius: 1.25rem;
+  corner-shape: squircle;
+  text-decoration: none;
+  transition: background-color 120ms ease-out, transform 150ms ease-out;
+}
+
+.hero-creator:hover {
+  background: var(--surface-strong);
+  transform: translateY(-2px);
+}
+
+.hero-creator:active {
+  transform: scale(0.96);
+}
+
+.creator-copy {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 650;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.creator-copy strong {
+  color: var(--ink);
+  font-size: 0.84rem;
+}
+
+.creator-arrow {
+  color: var(--muted);
 }
 
 .hero-actions,
@@ -400,6 +424,7 @@ nav a:hover,
   .stagger-item:nth-child(2) { animation-delay: 100ms; }
   .stagger-item:nth-child(3) { animation-delay: 200ms; }
   .stagger-item:nth-child(4) { animation-delay: 300ms; }
+  .stagger-item:nth-child(5) { animation-delay: 400ms; }
 
   @keyframes reveal {
     to {
@@ -527,7 +552,7 @@ nav a:hover,
 .preview-grid,
 .exercise-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -540,15 +565,17 @@ nav a:hover,
 }
 
 .card-surface {
-  padding: 0.65rem;
-  background: var(--surface);
+  display: flex;
+  aspect-ratio: 3 / 4;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--card-gradient);
   border-radius: 2rem;
   corner-shape: squircle;
-  transition: background-color 120ms ease-out, transform 150ms ease-out;
+  transition: transform 150ms ease-out;
 }
 
 .card-link:hover .card-surface {
-  background: var(--surface-strong);
   transform: translateY(-3px);
 }
 
@@ -573,8 +600,16 @@ nav a:hover,
   object-fit: contain;
 }
 
+.card-image {
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+  padding: 1rem 1rem 0;
+  object-fit: contain;
+}
+
 .card-copy {
-  padding: 1.15rem 0.9rem 0.9rem;
+  padding: 0.9rem 1rem 1.1rem;
 }
 
 .card-copy h2 {
@@ -707,7 +742,7 @@ nav a:hover,
   aspect-ratio: 1;
   place-items: center;
   padding: clamp(1rem, 4vw, 3rem);
-  background: var(--stage);
+  background: var(--card-gradient);
   border-radius: 4rem;
   corner-shape: squircle;
 }
@@ -726,13 +761,14 @@ nav a:hover,
 
 .frame-card {
   padding: 0.65rem;
-  background: var(--surface);
+  background: var(--card-gradient);
   border-radius: 2rem;
   corner-shape: squircle;
 }
 
 .frame-card .card-stage {
   padding: 1.5rem;
+  background: transparent;
 }
 
 .frame-meta {
@@ -880,6 +916,11 @@ nav a:hover,
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .preview-grid,
+  .exercise-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .guide-nav {
     position: static;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -904,7 +945,7 @@ nav a:hover,
   }
 
   .hero-copy h1 {
-    font-size: clamp(2.6rem, 12vw, 3.8rem);
+    font-size: clamp(2.1rem, 8.5vw, 2.75rem);
   }
 
   .feature-grid,
@@ -932,7 +973,7 @@ nav a:hover,
   }
 
   .preview-grid {
-    grid-template-columns: repeat(3, minmax(10.5rem, 1fr));
+    grid-template-columns: repeat(5, minmax(10.5rem, 1fr));
     overflow-x: auto;
     padding-block-end: 0.5rem;
     scroll-snap-type: x proximity;
@@ -986,12 +1027,14 @@ nav a:hover,
 
   .action-link,
   .copy-control,
+  .hero-creator,
   .card-surface {
     transition: none;
   }
 
   .action-link:active,
   .copy-control:active,
+  .hero-creator:active,
   .card-link:active .card-surface {
     scale: 1;
     transform: none;

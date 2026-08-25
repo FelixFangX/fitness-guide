@@ -34,7 +34,7 @@ describe('exercise catalog', () => {
 
   it('builds CDN asset URLs and handles missing exercises', () => {
     expect(getAssetUrl('push-up', 2)).toBe(
-      'https://cdn.jsdelivr.net/npm/@bryllim/workout-guide@1.0.0/assets/push-up/frame-2.png',
+      'https://cdn.jsdelivr.net/npm/@bryllim/workout-guide@1.0.0/assets/push-up/frame-2.svg',
     );
     expect(getAssetUrl('missing', 1)).toBeNull();
   });

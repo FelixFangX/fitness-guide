@@ -10,7 +10,7 @@ export type ExerciseFrame = {
   path: string;
   width: 512;
   height: 512;
-  format: 'png';
+  format: 'svg';
   attribution: ExerciseAttribution;
 };
 

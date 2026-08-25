@@ -8,5 +8,5 @@ export function withBase(path = '') {
 
 export function frameUrl(slug: string, frame: ExerciseFrame | number) {
   const index = typeof frame === 'number' ? frame : frame.index;
-  return withBase(`frames/${slug}/frame-${index}.png`);
+  return withBase(`frames/${slug}/frame-${index}.svg`);
 }

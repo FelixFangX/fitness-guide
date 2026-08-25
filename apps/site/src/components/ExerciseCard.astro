@@ -25,16 +25,15 @@ const searchText = [
 >
   <a class="card-link focus-shell" href={withBase(`exercises/${exercise.slug}/`)}>
     <div class="card-surface" data-squircle data-radius="28">
-      <div class="card-stage" data-squircle data-radius="20">
-        <img
-          src={frameUrl(exercise.slug, 1)}
-          alt={`${exercise.name} exercise illustration`}
-          loading="lazy"
-          decoding="async"
-          width="512"
-          height="512"
-        />
-      </div>
+      <img
+        class="card-image"
+        src={frameUrl(exercise.slug, 1)}
+        alt={`${exercise.name} exercise illustration`}
+        loading="lazy"
+        decoding="async"
+        width="512"
+        height="512"
+      />
       <div class="card-copy">
         <h2>{exercise.name}</h2>
         <p>{exercise.primaryMuscle} · {exercise.equipment}</p>

@@ -26,8 +26,8 @@ for (const exercise of manifest) {
     const path = join(packageRoot, frame.path);
     await access(path);
     const metadata = await sharp(path).metadata();
-    if (metadata.width !== 512 || metadata.height !== 512 || metadata.format !== 'png' || !metadata.hasAlpha) {
-      throw new Error(`${frame.path} must be a transparent 512 × 512 PNG.`);
+    if (metadata.width !== 512 || metadata.height !== 512 || metadata.format !== 'svg' || !metadata.hasAlpha) {
+      throw new Error(`${frame.path} must be a transparent 512 × 512 SVG.`);
     }
     frameCount += 1;
   }

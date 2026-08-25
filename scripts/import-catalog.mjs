@@ -7,6 +7,8 @@ import { pathToFileURL } from 'node:url';
 import sharp from 'sharp';
 import ts from 'typescript';
 
+import { vectorizePng } from './lib/vectorize-png.mjs';
+
 const projectRoot = resolve(dirname(new URL(import.meta.url).pathname), '..');
 const sourceArgument = process.argv[2];
 if (!sourceArgument) {
@@ -117,12 +119,19 @@ for (const definition of definitions) {
       url: source.sourceUrl,
       license: 'CC BY-SA 4.0',
       licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
-      changes: 'Rasterized on a transparent 512 × 512 canvas and recolored for monochrome display.',
+      changes: 'Rasterized on a transparent 512 × 512 canvas, recolored for monochrome display, and vector-traced.',
     };
   }
 
   await copyFile(secondFrame, join(destination, 'frame-2.png'));
   await copyFile(thirdFrame, join(destination, 'frame-3.png'));
+
+  for (const index of [1, 2, 3]) {
+    await vectorizePng(
+      join(destination, `frame-${index}.png`),
+      join(destination, `frame-${index}.svg`),
+    );
+  }
 
   const baseAttribution = {
     creator: 'Bryl Lim',
@@ -146,10 +155,10 @@ for (const definition of definitions) {
     isStretch: definition.isStretch === true,
     frames: [1, 2, 3].map((index) => ({
       index,
-      path: `assets/${slug}/frame-${index}.png`,
+      path: `assets/${slug}/frame-${index}.svg`,
       width: 512,
       height: 512,
-      format: 'png',
+      format: 'svg',
       attribution: index === 1 ? firstFrameAttribution : baseAttribution,
     })),
     attribution: firstFrameAttribution,
@@ -162,5 +171,5 @@ for (const filename of ['LICENSE', 'LICENSE-ASSETS', 'LICENSES.md', 'ATTRIBUTION
   await copyFile(join(projectRoot, filename), join(packageRoot, filename));
 }
 
-console.log(`Imported ${manifest.length} exercises and ${manifest.length * 3} PNG frames.`);
+console.log(`Imported ${manifest.length} exercises with PNG sources and ${manifest.length * 3} SVG frames.`);
 console.log(`Rasterized ${rasterizedFirstFrames} Everkinetic first poses.`);

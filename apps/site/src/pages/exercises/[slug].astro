@@ -10,7 +10,7 @@ export function getStaticPaths() {
 
 type Props = { exercise: Exercise };
 const { exercise } = Astro.props;
-const staticImport = `import frame1 from '@bryllim/workout-guide/assets/${exercise.slug}/frame-1.png';`;
+const staticImport = `import frame1 from '@bryllim/workout-guide/assets/${exercise.slug}/frame-1.svg';`;
 const cdnUrl = getAssetUrl(exercise.slug, 1) ?? '';
 const typeLabel = exercise.exerciseType.split('_').map((word) => word[0].toUpperCase() + word.slice(1)).join(' ');
 ---
@@ -27,9 +27,9 @@ const typeLabel = exercise.exerciseType.split('_').map((word) => word[0].toUpper
     </header>
 
     <section class="section" aria-labelledby="frames-title">
-      <div class="section-heading"><div><p class="eyebrow">Transparent PNG · 512 × 512</p><h2 id="frames-title">All three frames.</h2></div><p>Use them as a sequence or select the pose that fits your interface.</p></div>
+      <div class="section-heading"><div><p class="eyebrow">Transparent SVG · 512 × 512</p><h2 id="frames-title">All three frames.</h2></div><p>Use them as a sequence or select the pose that fits your interface.</p></div>
       <div class="frame-grid">
-        {exercise.frames.map((frame) => <div class="frame-card" data-squircle data-radius="32"><div class="card-stage" data-squircle data-radius="22"><img src={frameUrl(exercise.slug, frame)} alt={`${exercise.name}, frame ${frame.index}`} width="512" height="512" loading="lazy" /></div><div class="frame-meta"><p>Frame {frame.index}</p><a href={frameUrl(exercise.slug, frame)} download={`${exercise.slug}-frame-${frame.index}.png`}>Download</a></div></div>)}
+        {exercise.frames.map((frame) => <div class="frame-card" data-squircle data-radius="32"><div class="card-stage" data-squircle data-radius="22"><img src={frameUrl(exercise.slug, frame)} alt={`${exercise.name}, frame ${frame.index}`} width="512" height="512" loading="lazy" /></div><div class="frame-meta"><p>Frame {frame.index}</p><a href={frameUrl(exercise.slug, frame)} download={`${exercise.slug}-frame-${frame.index}.svg`}>Download</a></div></div>)}
       </div>
     </section>
 

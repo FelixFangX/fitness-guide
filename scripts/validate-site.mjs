@@ -38,7 +38,7 @@ for (const htmlFile of htmlFiles) {
   }
 }
 
-for (const required of ['index.html', 'exercises/index.html', 'exercises/push-up/index.html', 'guide/index.html', 'sitemap-index.xml', 'og.png']) {
+for (const required of ['index.html', 'exercises/index.html', 'exercises/push-up/index.html', 'guide/index.html', 'sitemap-index.xml', 'og.png', 'og.svg']) {
   try {
     await access(join(dist, required));
   } catch {

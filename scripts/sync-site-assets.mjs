@@ -1,4 +1,4 @@
-import { cp, mkdir, readFile, rm } from 'node:fs/promises';
+import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 
 import sharp from 'sharp';
@@ -15,15 +15,16 @@ await cp(join(packageRoot, 'assets'), targetFrames, { recursive: true });
 
 const manifest = JSON.parse(await readFile(join(packageRoot, 'manifest.json'), 'utf8'));
 const featured = ['push-up', 'squat', 'deadlift'];
-const composites = [];
+const vectorFrames = [];
 for (const [index, slug] of featured.entries()) {
   const exercise = manifest.find((item) => item.slug === slug);
   if (!exercise) throw new Error(`Missing featured exercise: ${slug}`);
-  const image = await sharp(join(packageRoot, exercise.frames[0].path))
-    .resize(190, 190, { fit: 'contain' })
-    .png()
-    .toBuffer();
-  composites.push({ input: image, left: 574 + index * 196, top: 218 });
+  const frame = await readFile(join(packageRoot, exercise.frames[0].path), 'utf8');
+  const body = frame.match(/<svg[^>]*>([\s\S]*)<\/svg>/)?.[1];
+  if (!body) throw new Error(`Invalid SVG frame: ${exercise.frames[0].path}`);
+  vectorFrames.push(
+    `<g transform="translate(${574 + index * 196} 218) scale(${190 / 512})">${body}</g>`,
+  );
 }
 
 const background = Buffer.from(`
@@ -34,12 +35,13 @@ const background = Buffer.from(`
     <text x="72" y="292" fill="#171717" font-family="ui-rounded, system-ui" font-size="74" font-weight="700">Guide.</text>
     <text x="76" y="366" fill="#666666" font-family="ui-rounded, system-ui" font-size="28">302 exercises. 906 open-source frames.</text>
     <text x="76" y="502" fill="#171717" font-family="ui-rounded, system-ui" font-size="22">Created by Bryl Lim</text>
+    ${vectorFrames.join('\n    ')}
   </svg>
 `);
 
+await writeFile(join(sitePublic, 'og.svg'), background);
 await sharp(background)
-  .composite(composites)
   .png({ quality: 100, effort: 10 })
   .toFile(join(sitePublic, 'og.png'));
 
-console.log('Synced 906 site frames and generated social artwork.');
+console.log('Synced 906 site frames and generated SVG and PNG social artwork.');

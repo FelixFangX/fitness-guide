@@ -26,7 +26,7 @@ Direct asset imports and literal React Native `require()` examples are documente
 
 This npm-workspace monorepo contains:
 
-- `packages/workout-guide`: package API, canonical manifest, and all 906 transparent 512 × 512 PNGs.
+- `packages/workout-guide`: package API, canonical manifest, and all 906 transparent 512 × 512 SVGs, with PNG sources retained for compatibility.
 - `apps/site`: Astro landing page, gallery, detail pages, and guide.
 - `scripts`: deterministic catalog import and validation utilities.
 

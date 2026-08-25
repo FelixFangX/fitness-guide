@@ -8,10 +8,9 @@ type Props = {
   title: string;
   description: string;
   image?: string;
-  showBrand?: boolean;
 };
 
-const { title, description, image = withBase('og.png'), showBrand = true } = Astro.props;
+const { title, description, image = withBase('og.svg') } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL(image.replace(/^\//, ''), Astro.site);
 ---
@@ -37,7 +36,7 @@ const socialImage = new URL(image.replace(/^\//, ''), Astro.site);
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
-    <Header showBrand={showBrand} />
+    <Header />
     <main id="main-content">
       <slot />
     </main>

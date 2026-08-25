@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "build": "npm run build -w @bryllim/workout-guide && npm run build -w workout-guide-site",
+    "assets:vectorize": "node scripts/vectorize-assets.mjs",
     "catalog:import": "node scripts/import-catalog.mjs",
     "catalog:validate": "node scripts/validate-catalog.mjs",
     "check": "npm run catalog:validate && npm run typecheck && npm run lint && npm test && npm run build",
@@ -29,7 +30,9 @@
     "@types/node": "^26.2.0",
     "eslint": "^10.9.0",
     "globals": "^17.11.0",
+    "potrace": "^2.1.8",
     "sharp": "^0.35.3",
+    "svgo": "^4.1.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.67.0",
     "vitest": "^4.1.11"
