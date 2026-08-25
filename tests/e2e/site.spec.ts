@@ -44,7 +44,7 @@ test('detail page exposes three frames and download links', async ({ page }) => 
   await expect(page.getByRole('heading', { name: 'Push-up', exact: true })).toBeVisible();
   await expect(page.locator('.frame-card')).toHaveCount(3);
   await expect(page.getByRole('link', { name: 'Download' })).toHaveCount(3);
-  await expect(page.getByText('assets/push-up/frame-1.png', { exact: true })).toBeVisible();
+  await expect(page.getByText('assets/push-up/frame-1.svg', { exact: true })).toBeVisible();
 });
 
 test('reduced motion disables hero blur and translation', async ({ page }) => {

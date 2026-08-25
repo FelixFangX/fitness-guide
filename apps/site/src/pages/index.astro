@@ -41,7 +41,7 @@ const frame = getAssetUrl(pushUp.slug, 1);`;
     <div class="developer-panel" data-squircle data-radius="32">
       <div class="developer-panel-label"><span>Quick start</span><span>TypeScript</span></div>
       <div class="install-pill" data-squircle data-radius="18"><code>{installCommand}</code><CopyButton text={installCommand} /></div>
-      <pre><code>{quickStart}</code></pre>
+      <pre tabindex="0"><code>{quickStart}</code></pre>
       <div class="developer-previews" aria-label="Sample exercise assets">
         {developerPreviews.map((exercise) => <a href={withBase(`exercises/${exercise.slug}/`)} aria-label={`View ${exercise.name}`}><img src={frameUrl(exercise.slug, 1)} alt="" width="512" height="512" loading="eager" /></a>)}
       </div>

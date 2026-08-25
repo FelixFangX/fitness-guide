@@ -41,8 +41,8 @@ const typeLabel = exercise.exerciseType.split('_').map((word) => word[0].toUpper
     <section class="section guide-layout" aria-labelledby="use-title">
       <div><p class="eyebrow">Copy and ship</p><h2 id="use-title">Use this exercise.</h2></div>
       <div class="guide-content">
-        <h3>Static import</h3><div class="code-with-copy"><CopyButton text={staticImport} /><div class="code-block" data-squircle data-radius="24"><pre><code>{staticImport}</code></pre></div></div>
-        <h3>CDN URL</h3><div class="code-with-copy"><CopyButton text={cdnUrl} /><div class="code-block" data-squircle data-radius="24"><pre><code>{cdnUrl}</code></pre></div></div>
+        <h3>Static import</h3><div class="code-with-copy"><CopyButton text={staticImport} /><div class="code-block" data-squircle data-radius="24"><pre tabindex="0"><code>{staticImport}</code></pre></div></div>
+        <h3>CDN URL</h3><div class="code-with-copy"><CopyButton text={cdnUrl} /><div class="code-block" data-squircle data-radius="24"><pre tabindex="0"><code>{cdnUrl}</code></pre></div></div>
         <p>Asset path: <code>{exercise.frames[0].path}</code></p><p><a href={withBase('guide/')}>Read the complete integration guide →</a></p>
       </div>
     </section>
