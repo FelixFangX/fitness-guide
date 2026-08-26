@@ -1,5 +1,5 @@
 {
-  "name": "workout-guide-site",
+  "name": "fitness-guide-site",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -7,13 +7,14 @@
     "prebuild": "node ../../scripts/sync-site-assets.mjs",
     "predev": "node ../../scripts/sync-site-assets.mjs",
     "build": "astro build",
+    "build:sites": "astro build && node scripts/create-sites-worker.mjs",
     "dev": "astro dev",
     "preview": "astro preview",
     "typecheck": "astro check"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
-    "@bryllim/workout-guide": "1.0.0",
+    "@bryllim/workout-guide": "workspace:*",
     "astro": "^7.2.4",
     "figma-squircle": "^1.1.0"
   },

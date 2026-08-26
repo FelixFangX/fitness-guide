@@ -1,0 +1,92 @@
+---
+import type { SiteLocale } from '../lib/locale';
+
+type Props = { locale: SiteLocale };
+
+const { locale } = Astro.props;
+const labels = locale === 'zh-CN'
+  ? { completeSet: '完成一组', completed: '已完成', inProgress: '进行中', chooseSession: '开始此训练', completedThisWeek: '本周已完成', sessions: '次训练', noRecords: '完成一次训练后，这里会显示你的本周记录。' }
+  : { completeSet: 'Complete set', completed: 'Complete', inProgress: 'In progress', chooseSession: 'Start this workout', completedThisWeek: 'Completed this week', sessions: 'sessions', noRecords: 'Complete a workout to see this week’s record here.' };
+---
+
+<script is:inline define:vars={{ labels }}>
+  const storageKey = 'fitness-guide:training-state:v1';
+  const dateKey = () => {
+    const date = new Date();
+    const offset = date.getTimezoneOffset() * 60_000;
+    return new Date(date.getTime() - offset).toISOString().slice(0, 10);
+  };
+  const read = () => {
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) || '{}');
+    } catch {
+      return {};
+    }
+  };
+  let state = read();
+  state.sets ||= {};
+  state.history ||= {};
+  state.selectedSessionId ||= 'foundation';
+  const today = dateKey();
+  const write = () => localStorage.setItem(storageKey, JSON.stringify(state));
+  const setKey = (sessionId, exerciseId) => `${today}:${sessionId}:${exerciseId}`;
+  const allSetButtons = () => Array.from(document.querySelectorAll('[data-complete-set]'));
+  const isSessionComplete = (sessionId) => {
+    const controls = allSetButtons().filter((button) => button.dataset.sessionId === sessionId);
+    return controls.length > 0 && controls.every((button) => Number(state.sets[setKey(sessionId, button.dataset.exerciseId)] || 0) >= Number(button.dataset.totalSets));
+  };
+  const completedThisWeek = () => {
+    const now = new Date();
+    const start = new Date(now);
+    start.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+    start.setHours(0, 0, 0, 0);
+    return Object.entries(state.history).flatMap(([date, sessions]) => new Date(`${date}T00:00:00`) >= start ? sessions : []).length;
+  };
+  const refresh = () => {
+    const selected = state.selectedSessionId || 'foundation';
+    for (const session of document.querySelectorAll('[data-workout-session]')) {
+      session.hidden = session.dataset.sessionId !== selected;
+    }
+    for (const control of allSetButtons()) {
+      const completed = Number(state.sets[setKey(control.dataset.sessionId, control.dataset.exerciseId)] || 0);
+      const total = Number(control.dataset.totalSets || 0);
+      control.disabled = completed >= total;
+      control.textContent = completed >= total ? labels.completed : `${labels.completeSet} · ${completed}/${total}`;
+      const progress = control.closest('[data-workout-exercise]')?.querySelector('[data-set-progress]');
+      if (progress) progress.textContent = `${completed}/${total}`;
+    }
+    for (const status of document.querySelectorAll('[data-session-status]')) {
+      const complete = isSessionComplete(status.dataset.sessionStatus);
+      status.textContent = complete ? labels.completed : labels.inProgress;
+      status.dataset.complete = String(complete);
+    }
+    for (const count of document.querySelectorAll('[data-weekly-complete]')) {
+      count.textContent = String(completedThisWeek());
+    }
+    for (const empty of document.querySelectorAll('[data-progress-empty]')) {
+      empty.hidden = completedThisWeek() !== 0;
+    }
+  };
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return;
+    const selected = event.target.closest('[data-select-session]');
+    if (selected) {
+      state.selectedSessionId = selected.dataset.selectSession;
+      write();
+      return;
+    }
+    const button = event.target.closest('[data-complete-set]');
+    if (!button || button.disabled) return;
+    const key = setKey(button.dataset.sessionId, button.dataset.exerciseId);
+    const next = Math.min(Number(button.dataset.totalSets), Number(state.sets[key] || 0) + 1);
+    state.sets[key] = next;
+    if (isSessionComplete(button.dataset.sessionId)) {
+      const sessions = new Set(state.history[today] || []);
+      sessions.add(button.dataset.sessionId);
+      state.history[today] = [...sessions];
+    }
+    write();
+    refresh();
+  });
+  refresh();
+</script>

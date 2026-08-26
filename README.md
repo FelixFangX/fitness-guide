@@ -1,15 +1,28 @@
-# Workout Guide
+# Fitness Guide
 
-An open exercise illustration library containing 302 exercises, three consistent frames per exercise, a typed framework-neutral npm package, and a searchable static gallery.
+[简体中文](./README.zh-CN.md)
+
+A bilingual, local-first personal fitness guide built from 302 exercise illustrations. It starts in Chinese and offers an English switch on every page. The app provides a three-session weekly routine, set-by-set completion, weekly progress, and a searchable movement library; all training records remain in the browser's local storage.
 
 The original pose artwork used by this project comes from [Everkinetic](https://github.com/everkinetic/data) under CC BY-SA 4.0. [Bryl Lim](https://bryllim.com) expanded upon that foundation with additional exercises and animation frames, normalized assets, structured metadata, package APIs, and the documentation gallery.
 
-[Browse the gallery](https://bryllim.github.io/workout-guide/) · [Read the guide](https://bryllim.github.io/workout-guide/guide/) · [Open the package on npm](https://www.npmjs.com/package/@bryllim/workout-guide)
+Run the local site at `http://localhost:4321/fitness-guide/`. Set `SITE_URL` before deploying so canonical URLs and the sitemap use your domain.
 
-## Install
+## Personal fitness app
+
+Run the app locally, then open `http://localhost:4321/fitness-guide/`:
 
 ```sh
-npm install @bryllim/workout-guide
+pnpm install
+pnpm dev
+```
+
+The default plan has three sessions: foundation, strength, and movement & recovery. It requires no account or backend. Clear browser site data to reset personal training records.
+
+## Reuse the exercise package
+
+```sh
+pnpm add @bryllim/workout-guide
 ```
 
 ```ts
@@ -20,25 +33,24 @@ const bodyweightChest = searchExercises('chest', { equipment: 'bodyweight' });
 const firstFrame = getAssetUrl('push-up', 1);
 ```
 
-Direct asset imports and literal React Native `require()` examples are documented in the [integration guide](https://bryllim.github.io/workout-guide/guide/).
+The package remains framework-neutral, so its SVGs and typed metadata can be reused in other products.
 
 ## Repository
 
-This npm-workspace monorepo contains:
+This pnpm workspace monorepo contains:
 
 - `packages/workout-guide`: package API, canonical manifest, and all 906 transparent 512 × 512 SVGs, with PNG sources retained for compatibility.
-- `apps/site`: Astro landing page, gallery, detail pages, and guide.
+- `apps/site`: Astro personal fitness guide, movement library, and exercise detail pages.
 - `scripts`: deterministic catalog import and validation utilities.
 
-Run the project locally:
+Run all validation checks:
 
 ```sh
-npm install
-npm run check
-npm run dev
+pnpm install
+pnpm check
 ```
 
-The normalized catalog and all package assets are checked into the repository. Maintainers can regenerate them from a compatible source export with `npm run catalog:import -- /path/to/source`.
+The normalized catalog and all package assets are checked into the repository. Maintainers can regenerate them from a compatible source export with `pnpm catalog:import -- /path/to/source`.
 
 ## Licensing
 

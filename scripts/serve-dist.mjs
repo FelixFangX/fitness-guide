@@ -5,7 +5,7 @@ import { dirname, extname, join, normalize, resolve } from 'node:path';
 
 const projectRoot = resolve(dirname(new URL(import.meta.url).pathname), '..');
 const dist = join(projectRoot, 'apps', 'site', 'dist');
-const base = '/workout-guide';
+const base = '/fitness-guide';
 const mimeTypes = {
   '.css': 'text/css; charset=utf-8',
   '.html': 'text/html; charset=utf-8',
@@ -39,4 +39,4 @@ createServer(async (request, response) => {
   } catch {
     response.writeHead(404).end('Not found');
   }
-}).listen(4321, '127.0.0.1', () => console.log('Serving the built site at http://127.0.0.1:4321/workout-guide/'));
+}).listen(4321, '127.0.0.1', () => console.log('Serving the built site at http://127.0.0.1:4321/fitness-guide/'));

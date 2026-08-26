@@ -27,21 +27,36 @@ for (const [index, slug] of featured.entries()) {
   );
 }
 
-const background = Buffer.from(`
+function socialArtwork({ titleLines, subtitle }) {
+  return Buffer.from(`
   <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
     <rect width="1200" height="630" fill="#f5f5f2"/>
     <rect x="548" y="94" width="622" height="442" rx="58" fill="#171717"/>
-    <text x="72" y="220" fill="#171717" font-family="ui-rounded, system-ui" font-size="74" font-weight="700">Workout</text>
-    <text x="72" y="292" fill="#171717" font-family="ui-rounded, system-ui" font-size="74" font-weight="700">Guide.</text>
-    <text x="76" y="366" fill="#666666" font-family="ui-rounded, system-ui" font-size="28">302 exercises. 906 open-source frames.</text>
+    <text x="72" y="220" fill="#171717" font-family="ui-rounded, PingFang SC, system-ui" font-size="74" font-weight="700">${titleLines[0]}</text>
+    <text x="72" y="292" fill="#171717" font-family="ui-rounded, PingFang SC, system-ui" font-size="74" font-weight="700">${titleLines[1]}</text>
+    <text x="76" y="366" fill="#666666" font-family="ui-rounded, PingFang SC, system-ui" font-size="28">${subtitle}</text>
     <text x="76" y="502" fill="#171717" font-family="ui-rounded, system-ui" font-size="22">Created by Bryl Lim</text>
     ${vectorFrames.join('\n    ')}
   </svg>
 `);
+}
 
-await writeFile(join(sitePublic, 'og.svg'), background);
-await sharp(background)
+const chineseSocial = socialArtwork({
+  titleLines: ['健身', '指南.'],
+  subtitle: '302 个动作 · 906 张开放 SVG 动作帧',
+});
+const englishSocial = socialArtwork({
+  titleLines: ['Fitness', 'Guide.'],
+  subtitle: '302 exercises. 906 open-source frames.',
+});
+
+await writeFile(join(sitePublic, 'og.svg'), chineseSocial);
+await sharp(chineseSocial)
   .png({ quality: 100, effort: 10 })
   .toFile(join(sitePublic, 'og.png'));
+await writeFile(join(sitePublic, 'og-en.svg'), englishSocial);
+await sharp(englishSocial)
+  .png({ quality: 100, effort: 10 })
+  .toFile(join(sitePublic, 'og-en.png'));
 
 console.log('Synced 906 site frames and generated SVG and PNG social artwork.');

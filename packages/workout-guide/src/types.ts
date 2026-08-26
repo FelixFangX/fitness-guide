@@ -5,6 +5,8 @@ export type ExerciseType =
   | 'distance_duration'
   | 'assisted_bodyweight';
 
+export type SupportedLocale = 'en' | 'zh-CN';
+
 export type ExerciseFrame = {
   index: 1 | 2 | 3;
   path: string;
@@ -39,6 +41,15 @@ export type Exercise = {
   isStretch: boolean;
   frames: [ExerciseFrame, ExerciseFrame, ExerciseFrame];
   attribution: ExerciseAttribution;
+};
+
+export type ExerciseTranslation = {
+  name: string;
+  equipment: string;
+  primaryMuscle: string;
+  secondaryMuscles: string[];
+  exerciseType: string;
+  aliases: string[];
 };
 
 export type ExerciseSearchFilters = {

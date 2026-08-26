@@ -1,0 +1,22 @@
+---
+import type { SiteLocale } from '../../lib/locale';
+import { withLocale } from '../../lib/paths';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+type Props = { locale: SiteLocale };
+const { locale } = Astro.props;
+const copy = locale === 'zh-CN'
+  ? { title: '训练进度 — 健身指南', description: '查看保存在此设备上的训练完成记录。', eyebrow: '本地训练记录', heading: '让记录为下一次训练服务。', summary: '这里不会评分，也不会制造连续打卡压力。它只告诉你：这周已经完成了几次训练。', completed: '本周已完成', unit: '次训练', privacy: '你的训练记录仅保存在当前浏览器。清除浏览器网站数据后，记录会一并移除。', empty: '完成一节训练后，这里会显示本周记录。', action: '开始今天的训练', rhythm: '建议节奏', rhythmBody: '在训练日之间至少留出一天恢复；如果疲劳未消退，可以把下一次训练顺延。' }
+  : { title: 'Progress — Fitness Guide', description: 'View workout completion records saved on this device.', eyebrow: 'Local training record', heading: 'Let the record support the next workout.', summary: 'No scoring and no streak pressure. It simply shows how many workouts you completed this week.', completed: 'Completed this week', unit: 'sessions', privacy: 'Your record stays in this browser only. Clearing website data will also remove it.', empty: 'Complete one workout to see this week’s record here.', action: 'Start today’s workout', rhythm: 'Suggested rhythm', rhythmBody: 'Leave at least one recovery day between sessions. If fatigue persists, move the next workout later.' };
+---
+
+<BaseLayout title={copy.title} description={copy.description} {locale} path="progress/">
+  <section class="app-shell progress-page page-shell" aria-labelledby="progress-title">
+    <header class="progress-intro"><p class="eyebrow">{copy.eyebrow}</p><h1 id="progress-title">{copy.heading}</h1><p>{copy.summary}</p></header>
+    <div class="progress-layout">
+      <section class="progress-number" data-squircle data-radius="46" aria-label={copy.completed}><span>{copy.completed}</span><strong data-weekly-complete>0</strong><p>{copy.unit}</p><a class="primary-button" href={withLocale(locale, 'workout/')}>{copy.action}</a></section>
+      <div class="progress-side"><section class="progress-card" data-squircle data-radius="30"><p class="eyebrow">{copy.rhythm}</p><h2>{locale === 'zh-CN' ? '恢复也是计划的一部分。' : 'Recovery is part of the plan.'}</h2><p>{copy.rhythmBody}</p></section><p class="privacy-note">{copy.privacy}</p></div>
+    </div>
+    <p class="progress-empty" data-progress-empty>{copy.empty}</p>
+  </section>
+</BaseLayout>

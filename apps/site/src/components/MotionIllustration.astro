@@ -1,0 +1,94 @@
+---
+import { frameUrl } from '../lib/paths';
+
+type Props = {
+  slug: string;
+  alt: string;
+  class?: string;
+  loading?: 'eager' | 'lazy';
+  decoding?: 'async' | 'auto' | 'sync';
+  initialFrame?: 1 | 2 | 3;
+};
+
+const { slug, alt, class: className, loading = 'lazy', decoding = 'async', initialFrame = 1 } = Astro.props;
+const frames = [1, 2, 3, 2].map((frame) => frameUrl(slug, frame));
+---
+
+<img
+  class:list={['motion-illustration', className]}
+  src={frameUrl(slug, initialFrame)}
+  alt={alt}
+  width="512"
+  height="512"
+  loading={loading}
+  decoding={decoding}
+  data-motion-illustration
+  data-motion-frames={JSON.stringify(frames)}
+  data-motion-initial={frameUrl(slug, initialFrame)}
+/>
+
+<script>
+  const images = Array.from(document.querySelectorAll<HTMLImageElement>('img[data-motion-illustration]'));
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const activeImages = new Set<HTMLImageElement>();
+  const frameIndices = new WeakMap<HTMLImageElement, number>();
+  const playbackInterval = 620;
+  let timer: number | undefined;
+
+  const getFrames = (image: HTMLImageElement) => {
+    try {
+      const frames = JSON.parse(image.dataset.motionFrames ?? '[]');
+      return Array.isArray(frames) ? frames.filter((frame): frame is string => typeof frame === 'string') : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const reset = (image: HTMLImageElement) => {
+    const initial = image.dataset.motionInitial;
+    if (initial && image.getAttribute('src') !== initial) image.src = initial;
+    frameIndices.set(image, 0);
+  };
+
+  const advance = (image: HTMLImageElement) => {
+    const frames = getFrames(image);
+    if (frames.length < 2) return;
+    const nextIndex = ((frameIndices.get(image) ?? 0) + 1) % frames.length;
+    image.src = frames[nextIndex];
+    frameIndices.set(image, nextIndex);
+  };
+
+  const stopTimer = () => {
+    if (timer === undefined) return;
+    window.clearInterval(timer);
+    timer = undefined;
+  };
+
+  const syncPlayback = () => {
+    const shouldPlay = !reducedMotion.matches && !document.hidden && activeImages.size > 0;
+    if (!shouldPlay) {
+      stopTimer();
+      if (reducedMotion.matches) images.forEach(reset);
+      return;
+    }
+    if (timer === undefined) timer = window.setInterval(() => activeImages.forEach(advance), playbackInterval);
+  };
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        const image = entry.target as HTMLImageElement;
+        if (entry.isIntersecting) activeImages.add(image);
+        else activeImages.delete(image);
+      }
+      syncPlayback();
+    }, { rootMargin: '160px 0px' });
+    images.forEach((image) => observer.observe(image));
+  } else {
+    images.forEach((image) => activeImages.add(image));
+    syncPlayback();
+  }
+
+  document.addEventListener('visibilitychange', syncPlayback);
+  reducedMotion.addEventListener('change', syncPlayback);
+</script>

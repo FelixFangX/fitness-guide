@@ -1,16 +1,63 @@
 ---
-import { withBase } from '../lib/paths';
+import { getBrandName } from '../lib/i18n';
+import type { SiteLocale } from '../lib/locale';
+import { withLocale } from '../lib/paths';
+
+type Props = {
+  locale: SiteLocale;
+};
+
+const { locale } = Astro.props;
+const copy = locale === 'zh-CN'
+  ? {
+      description: '个人训练记录只保存在此设备。',
+      navigation: '使用健身指南',
+      workout: '今日训练',
+      plan: '训练计划',
+      progress: '进度',
+      library: '动作库',
+      resources: '素材与许可',
+      source: '查看 SVG 素材来源',
+      attribution: '动作素材由 Bryl Lim 扩充，详见每个动作页的署名与许可。',
+    }
+  : {
+      description: 'Personal training records stay on this device.',
+      navigation: 'Use Fitness Guide',
+      workout: 'Today',
+      plan: 'Training plan',
+      progress: 'Progress',
+      library: 'Movement library',
+      resources: 'Assets and license',
+      source: 'View SVG source',
+      attribution: 'Exercise artwork was expanded by Bryl Lim; see each movement page for attribution and licensing.',
+    };
 ---
 
-<footer class="site-footer page-shell">
-  <div>
-    <p class="footer-title">Workout Guide</p>
-    <p>Open exercise visuals for thoughtful fitness products.</p>
+<footer class="site-footer">
+  <div class="footer-shell page-shell">
+    <div class="footer-brand">
+      <a href={withLocale(locale)}>{getBrandName(locale)}</a>
+      <p>{copy.description}</p>
+    </div>
+    <nav class="footer-nav" aria-label={copy.navigation}>
+      <p class="footer-heading">{copy.navigation}</p>
+      <div class="footer-links">
+        <a href={withLocale(locale, 'workout/')}>{copy.workout}</a>
+        <a href={withLocale(locale, 'plan/')}>{copy.plan}</a>
+        <a href={withLocale(locale, 'progress/')}>{copy.progress}</a>
+        <a href={withLocale(locale, 'exercises/')}>{copy.library}</a>
+      </div>
+    </nav>
+    <div class="footer-resources">
+      <p class="footer-heading">{copy.resources}</p>
+      <a class="footer-source-link" href="https://github.com/bryllim/workout-guide">
+        {copy.source}<span aria-hidden="true">↗</span>
+      </a>
+      <p>{copy.attribution}</p>
+    </div>
   </div>
-  <div class="footer-links">
-    <a href={withBase('guide/')}>Integration guide</a>
-    <a href="https://www.npmjs.com/package/@bryllim/workout-guide">npm</a>
-    <a href="https://github.com/bryllim/workout-guide">Source</a>
+  <div class="footer-bottom page-shell">
+    <span>{getBrandName(locale)}</span>
+    <span>CC BY-SA 4.0</span>
   </div>
-  <p>Created by <a href="https://bryllim.com">Bryl Lim</a>.</p>
 </footer>

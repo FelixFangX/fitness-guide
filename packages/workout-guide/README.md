@@ -1,12 +1,14 @@
 # @bryllim/workout-guide
 
+[简体中文](./README.zh-CN.md)
+
 Framework-neutral metadata and 906 exercise frames. The original pose artwork
 comes from [Everkinetic](https://github.com/everkinetic/data) under CC BY-SA
 4.0 and was expanded upon by [Bryl Lim](https://bryllim.com) with additional
 exercises, animation frames, normalized assets, metadata, and package APIs.
 
 ```sh
-npm install @bryllim/workout-guide
+pnpm add @bryllim/workout-guide
 ```
 
 ```ts

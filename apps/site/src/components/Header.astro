@@ -1,14 +1,34 @@
 ---
-import { withBase } from '../lib/paths';
+import { getBrandName } from '../lib/i18n';
+import { alternateLocale, type SiteLocale } from '../lib/locale';
+import { withLocale } from '../lib/paths';
+
+type Props = {
+  locale: SiteLocale;
+  path: string;
+};
+
+const { locale, path } = Astro.props;
+const copy = locale === 'zh-CN'
+  ? { home: '健身指南首页', workout: '今日训练', plan: '训练计划', progress: '进度', exercises: '动作库', switchLanguage: 'English', navigation: '主导航' }
+  : { home: 'Fitness Guide home', workout: 'Today', plan: 'Plan', progress: 'Progress', exercises: 'Library', switchLanguage: '中文', navigation: 'Primary navigation' };
+const alternate = alternateLocale(locale);
+const links = [
+  { path: 'workout/', label: copy.workout },
+  { path: 'plan/', label: copy.plan },
+  { path: 'progress/', label: copy.progress },
+  { path: 'exercises/', label: copy.exercises },
+];
 ---
 
 <header class="site-header">
-  <div class="nav-shell page-shell">
-    <a class="brand" href={withBase()} aria-label="Workout Guide home">Workout Guide</a>
-    <nav aria-label="Primary navigation">
-      <a href={withBase('exercises/')}>Exercises</a>
-      <a href={withBase('guide/')}>Guide</a>
-      <a href="https://github.com/bryllim/workout-guide">GitHub</a>
+  <div class="header-shell page-shell">
+    <a class="brand" href={withLocale(locale)} aria-label={copy.home}>{getBrandName(locale)}</a>
+    <nav class="primary-nav" aria-label={copy.navigation}>
+      {links.map((link) => (
+        <a href={withLocale(locale, link.path)} aria-current={path === link.path ? 'page' : undefined}>{link.label}</a>
+      ))}
     </nav>
+    <a class="language-switch" href={withLocale(alternate, path)} data-language-switch>{copy.switchLanguage}</a>
   </div>
 </header>

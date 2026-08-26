@@ -1,0 +1,36 @@
+---
+import { getLocalizedExercise } from '../../lib/i18n';
+import MotionIllustration from '../MotionIllustration.astro';
+import type { SiteLocale } from '../../lib/locale';
+import { withLocale } from '../../lib/paths';
+import { getPlannedExercises, getSessionText, trainingSessions } from '../../lib/training';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+type Props = { locale: SiteLocale };
+const { locale } = Astro.props;
+const copy = locale === 'zh-CN'
+  ? { title: '训练计划 — 健身指南', description: '每周三次的个人全身训练计划。', eyebrow: '默认个人计划', heading: '每周三次，留出恢复空间。', summary: '每次训练都围绕全身动作模式组织。可从任一节开始；完成记录只保存在此设备。', start: '开始此训练', exercises: '个动作', days: '本周已完成', session: '次训练' }
+  : { title: 'Training plan — Fitness Guide', description: 'A three-day personal full-body training plan.', eyebrow: 'Your default plan', heading: 'Three sessions a week, with room to recover.', summary: 'Each session is organized around full-body movement patterns. Start with any session; completion records stay on this device only.', start: 'Start this workout', exercises: 'movements', days: 'Completed this week', session: 'sessions' };
+---
+
+<BaseLayout title={copy.title} description={copy.description} {locale} path="plan/">
+  <section class="app-shell plan-page page-shell" aria-labelledby="plan-title">
+    <header class="plan-intro"><div><p class="eyebrow">{copy.eyebrow}</p><h1 id="plan-title">{copy.heading}</h1></div><p>{copy.summary}</p></header>
+    <div class="plan-progress-banner" data-squircle data-radius="28"><div><span>{copy.days}</span><strong><b data-weekly-complete>0</b> / 3 {copy.session}</strong></div><p>{locale === 'zh-CN' ? '从今天开始，不需要补做之前的训练。' : 'Start today—there is no need to make up previous sessions.'}</p></div>
+    <ol class="session-plan-list">
+      {trainingSessions.map((session) => {
+        const sessionText = getSessionText(session, locale);
+        const plannedExercises = getPlannedExercises(session);
+        const preview = plannedExercises.slice(0, 3);
+        return <li class="session-plan-card" data-squircle data-radius="34">
+          <div class="session-plan-meta"><span>{session.number}</span><span>{sessionText.duration}</span></div>
+          <div class="session-plan-copy"><p>{sessionText.focus}</p><h2>{sessionText.title}</h2><p>{sessionText.summary}</p></div>
+          <div class="session-preview" aria-label={`${sessionText.title} ${copy.exercises}`}>
+            {preview.map(({ exercise }) => { const localized = getLocalizedExercise(exercise, locale); return <MotionIllustration slug={exercise.slug} alt={localized.name} />; })}
+          </div>
+          <div class="session-plan-footer"><span>{plannedExercises.length} {copy.exercises}</span><a class="secondary-button" data-select-session={session.id} href={withLocale(locale, 'workout/')}>{copy.start}</a></div>
+        </li>;
+      })}
+    </ol>
+  </section>
+</BaseLayout>

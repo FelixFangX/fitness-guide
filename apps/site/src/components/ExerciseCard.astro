@@ -1,18 +1,31 @@
 ---
 import type { Exercise } from '@bryllim/workout-guide';
-import { frameUrl, withBase } from '../lib/paths';
+import MotionIllustration from './MotionIllustration.astro';
+import { getLocalizedExercise } from '../lib/i18n';
+import type { SiteLocale } from '../lib/locale';
+import { withLocale } from '../lib/paths';
 
 type Props = {
   exercise: Exercise;
+  locale: SiteLocale;
 };
 
-const { exercise } = Astro.props;
+const { exercise, locale } = Astro.props;
+const localized = getLocalizedExercise(exercise, locale);
 const searchText = [
   exercise.name,
   exercise.equipment,
   exercise.primaryMuscle,
   ...exercise.secondaryMuscles,
+  localized.name,
+  localized.equipment,
+  localized.primaryMuscle,
+  ...localized.secondaryMuscles,
+  ...localized.aliases,
 ].join(' ').toLowerCase();
+const illustrationAlt = locale === 'zh-CN'
+  ? `${localized.name}动作插画`
+  : `${localized.name} exercise illustration`;
 ---
 
 <article
@@ -23,21 +36,10 @@ const searchText = [
   data-muscle={exercise.primaryMuscle}
   data-type={exercise.exerciseType}
 >
-  <a class="card-link focus-shell" href={withBase(`exercises/${exercise.slug}/`)}>
-    <div class="card-surface" data-squircle data-radius="28">
-      <img
-        class="card-image"
-        src={frameUrl(exercise.slug, 1)}
-        alt={`${exercise.name} exercise illustration`}
-        loading="lazy"
-        decoding="async"
-        width="512"
-        height="512"
-      />
-      <div class="card-copy">
-        <h2>{exercise.name}</h2>
-        <p>{exercise.primaryMuscle} · {exercise.equipment}</p>
-      </div>
+  <a class="movement-card focus-shell" href={withLocale(locale, `exercises/${exercise.slug}/`)}>
+    <div class="movement-card-image">
+      <MotionIllustration slug={exercise.slug} alt={illustrationAlt} />
     </div>
+    <div class="movement-card-copy"><span>{localized.primaryMuscle}</span><h2>{localized.name}</h2><p>{localized.equipment}</p></div>
   </a>
 </article>

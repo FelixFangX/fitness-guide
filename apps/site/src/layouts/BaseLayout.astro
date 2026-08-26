@@ -1,28 +1,37 @@
 ---
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { withBase } from '../lib/paths';
+import TrainingState from '../components/TrainingState.astro';
+import { getMessages } from '../lib/i18n';
+import type { SiteLocale } from '../lib/locale';
+import { withBase, withLocale } from '../lib/paths';
 import '../styles/global.css';
 
 type Props = {
   title: string;
   description: string;
   image?: string;
+  locale: SiteLocale;
+  path: string;
 };
 
-const { title, description, image = withBase('og.svg') } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
-const socialImage = new URL(image.replace(/^\//, ''), Astro.site);
+const { title, description, image, locale, path } = Astro.props;
+const socialImagePath = image ?? withBase(locale === 'zh-CN' ? 'og.svg' : 'og-en.svg');
+const copy = getMessages(locale).layout;
+const canonical = new URL(withLocale(locale, path), Astro.site);
+const socialImage = new URL(socialImagePath.replace(/^\//, ''), Astro.site);
+const chineseAlternate = new URL(withLocale('zh-CN', path), Astro.site);
+const englishAlternate = new URL(withLocale('en', path), Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <meta name="author" content="Bryl Lim" />
-    <meta name="theme-color" content="#101010" />
+    <meta name="theme-color" content="#f4f3ed" />
     <meta name="description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
@@ -31,17 +40,29 @@ const socialImage = new URL(image.replace(/^\//, ''), Astro.site);
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="zh-CN" href={chineseAlternate} />
+    <link rel="alternate" hreflang="en" href={englishAlternate} />
+    <link rel="alternate" hreflang="x-default" href={chineseAlternate} />
     <link rel="icon" href={withBase('favicon.svg')} type="image/svg+xml" />
     <title>{title}</title>
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Skip to content</a>
-    <Header />
+    <a class="skip-link" href="#main-content">{copy.skipToContent}</a>
+    <Header {locale} {path} />
     <main id="main-content">
       <slot />
     </main>
-    <Footer />
-    <div class="sr-only" id="copy-status" role="status" aria-live="polite"></div>
+    <Footer {locale} />
+    <TrainingState {locale} />
+    <div
+      class="sr-only"
+      id="copy-status"
+      role="status"
+      aria-live="polite"
+      data-copied-label={copy.copied}
+      data-copied-status={copy.copiedStatus}
+      data-copy-label={copy.copy}
+    ></div>
     <script>
       import { getSvgPath } from 'figma-squircle';
 
@@ -69,16 +90,27 @@ const socialImage = new URL(image.replace(/^\//, ''), Astro.site);
       }
 
       const copyStatus = document.querySelector<HTMLElement>('#copy-status');
+      const copiedLabel = copyStatus?.dataset.copiedLabel ?? 'Copied';
+      const copiedStatus = copyStatus?.dataset.copiedStatus ?? 'Copied code to clipboard.';
+      const copyLabel = copyStatus?.dataset.copyLabel ?? 'Copy';
       for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy-text]')) {
         button.addEventListener('click', async () => {
           const text = button.dataset.copyText ?? '';
           await navigator.clipboard.writeText(text);
           const label = button.querySelector<HTMLElement>('[data-copy-label]');
-          if (label) label.textContent = 'Copied';
-          if (copyStatus) copyStatus.textContent = 'Copied code to clipboard.';
+          if (label) label.textContent = copiedLabel;
+          if (copyStatus) copyStatus.textContent = copiedStatus;
           window.setTimeout(() => {
-            if (label) label.textContent = button.dataset.defaultLabel ?? 'Copy';
+            if (label) label.textContent = button.dataset.defaultLabel ?? copyLabel;
           }, 1600);
+        });
+      }
+
+      for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-language-switch]')) {
+        link.addEventListener('click', () => {
+          const target = new URL(link.href, window.location.origin);
+          target.search = window.location.search;
+          link.href = target.toString();
         });
       }
     </script>

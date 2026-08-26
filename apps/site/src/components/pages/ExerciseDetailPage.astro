@@ -1,0 +1,29 @@
+---
+import type { Exercise } from '@bryllim/workout-guide';
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MotionIllustration from '../MotionIllustration.astro';
+import { getLocalizedExercise } from '../../lib/i18n';
+import type { SiteLocale } from '../../lib/locale';
+import { frameUrl, withLocale } from '../../lib/paths';
+import { getSessionText, trainingSessions } from '../../lib/training';
+
+type Props = { exercise: Exercise; locale: SiteLocale };
+const { exercise, locale } = Astro.props;
+const localized = getLocalizedExercise(exercise, locale);
+const includedIn = trainingSessions.filter((session) => session.exercises.some((item) => item.slug === exercise.slug));
+const copy = locale === 'zh-CN'
+  ? { title: `${localized.name} — 健身指南`, description: `${localized.name}的 SVG 动作示意、肌群与个人计划参考。`, back: '返回动作库', eyebrow: '动作参考', frames: '播放动作路径，再分步查看。', framesBody: '上方会循环播放三个关键帧；训练前用下方拆解确认动作路径，过程中以舒适、可控为先。', usedIn: '出现在默认计划中', notUsed: '当前不在默认三练计划内，可作为替换动作参考。', details: '动作要点', primary: '主要肌群', secondary: '次要肌群', equipment: '器械', type: '类型', attribution: '素材署名与许可', attributionBody: '动作素材由 Bryl Lim 扩充，采用 CC BY-SA 4.0；部分原始姿态来源于 Everkinetic。' }
+  : { title: `${localized.name} — Fitness Guide`, description: `SVG movement guide, muscles, and personal-plan reference for ${localized.name}.`, back: 'Back to movement library', eyebrow: 'Movement reference', frames: 'Play the movement path, then review each position.', framesBody: 'The illustration above loops through three key frames. Use the breakdown below to check the path before training; comfort and control come first while moving.', usedIn: 'Included in the default plan', notUsed: 'Not in the default three-session plan; use it as a movement replacement reference.', details: 'Movement details', primary: 'Primary muscle', secondary: 'Secondary muscles', equipment: 'Equipment', type: 'Type', attribution: 'Artwork attribution and license', attributionBody: 'Exercise artwork was expanded by Bryl Lim and is licensed CC BY-SA 4.0; some original poses are derived from Everkinetic.' };
+---
+
+<BaseLayout title={copy.title} description={copy.description} image={frameUrl(exercise.slug, 2)} {locale} path={`exercises/${exercise.slug}/`}>
+  <article class="app-shell detail-page page-shell">
+    <a class="text-link back-link" href={withLocale(locale, 'exercises/')}>← {copy.back}</a>
+    <header class="movement-hero"><div><p class="eyebrow">{copy.eyebrow}</p><h1>{localized.name}</h1><p>{localized.primaryMuscle} · {localized.equipment}</p></div><div class="movement-hero-image" data-squircle data-radius="52"><MotionIllustration slug={exercise.slug} alt={`${localized.name}${locale === 'zh-CN' ? '动作示意' : ' exercise illustration'}`} loading="eager" /></div></header>
+    <section class="detail-section"><div class="section-intro"><div><p class="eyebrow">01</p><h2>{copy.frames}</h2></div><p>{copy.framesBody}</p></div><div class="frame-grid">{exercise.frames.map((frame) => <figure class="frame-card" data-squircle data-radius="28"><img src={frameUrl(exercise.slug, frame)} alt={`${localized.name} ${locale === 'zh-CN' ? `第 ${frame.index} 个位置` : `position ${frame.index}`}`} width="512" height="512" loading="lazy" /><figcaption>{locale === 'zh-CN' ? `位置 ${frame.index}` : `Position ${frame.index}`}</figcaption></figure>)}</div></section>
+    <section class="detail-section detail-grid"><div><p class="eyebrow">02</p><h2>{copy.details}</h2></div><dl class="movement-facts"><div><dt>{copy.primary}</dt><dd>{localized.primaryMuscle}</dd></div><div><dt>{copy.secondary}</dt><dd>{localized.secondaryMuscles.join(locale === 'zh-CN' ? '、' : ', ') || '—'}</dd></div><div><dt>{copy.equipment}</dt><dd>{localized.equipment}</dd></div><div><dt>{copy.type}</dt><dd>{localized.exerciseType}</dd></div></dl></section>
+    <section class="detail-section plan-usage" data-squircle data-radius="32"><div><p class="eyebrow">03</p><h2>{copy.usedIn}</h2></div>{includedIn.length ? <ul>{includedIn.map((session) => <li><a data-select-session={session.id} href={withLocale(locale, 'workout/')}>{getSessionText(session, locale).title} <span>{getSessionText(session, locale).focus}</span></a></li>)}</ul> : <p>{copy.notUsed}</p>}</section>
+    <section class="detail-section attribution-card"><p class="eyebrow">04</p><h2>{copy.attribution}</h2><p>{copy.attributionBody} <a href={exercise.attribution.licenseUrl}>{exercise.attribution.license}</a></p></section>
+  </article>
+</BaseLayout>

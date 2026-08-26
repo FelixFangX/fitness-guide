@@ -1,20 +1,25 @@
 ---
+import { getMessages } from '../lib/i18n';
+import type { SiteLocale } from '../lib/locale';
+
 type Props = {
   text: string;
   label?: string;
   class?: string;
+  locale: SiteLocale;
 };
 
-const { text, label = 'Copy', class: className = '' } = Astro.props;
+const { text, label, class: className = '', locale } = Astro.props;
+const copy = getMessages(locale).layout;
 ---
 
 <button
   class:list={['copy-control focus-shell', className]}
   type="button"
   data-copy-text={text}
-  data-default-label={label}
+  data-default-label={label ?? copy.copy}
 >
   <span class="button-surface button-surface-light" data-squircle data-radius="18">
-    <span data-copy-label>{label}</span>
+    <span data-copy-label>{label ?? copy.copy}</span>
   </span>
 </button>

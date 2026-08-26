@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { exercises, getAssetUrl, getExercise, searchExercises } from '../src/index';
+import {
+  exercises,
+  getAssetUrl,
+  getExercise,
+  getExerciseTranslation,
+  normalizeSearchText,
+  searchExercises,
+  supportedLocales,
+} from '../src/index';
 
 describe('exercise catalog', () => {
   it('contains 302 unique exercises with three ordered frames', () => {
@@ -23,6 +31,20 @@ describe('exercise catalog', () => {
     expect(searchExercises('incline dumbbell').some((exercise) => exercise.slug === 'incline-dumbbell-press')).toBe(true);
     expect(searchExercises('resistance band glutes').length).toBeGreaterThan(0);
     expect(searchExercises('upper back').length).toBeGreaterThan(0);
+  });
+
+  it('returns complete zh-CN metadata and searches Chinese terms', () => {
+    expect(supportedLocales).toEqual(['en', 'zh-CN']);
+    expect(getExerciseTranslation('push-up', 'zh-CN')).toMatchObject({
+      name: '俯卧撑',
+      equipment: '自重',
+      primaryMuscle: '胸肌',
+    });
+    expect(getExerciseTranslation('missing', 'zh-CN')).toBeNull();
+    expect(searchExercises('俯卧撑').some((exercise) => exercise.slug === 'push-up')).toBe(true);
+    expect(searchExercises('深蹲', { equipment: '杠铃', primaryMuscle: '股四头肌' })
+      .some((exercise) => exercise.slug === 'squat')).toBe(true);
+    expect(normalizeSearchText('中文 · 训练')).toBe('中文 训练');
   });
 
   it('combines search and structured filters', () => {

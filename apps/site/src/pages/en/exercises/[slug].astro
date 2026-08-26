@@ -1,0 +1,13 @@
+---
+import { exercises, type Exercise } from '@bryllim/workout-guide';
+import ExerciseDetailPage from '../../../components/pages/ExerciseDetailPage.astro';
+
+export function getStaticPaths() {
+  return exercises.map((exercise) => ({ params: { slug: exercise.slug }, props: { exercise } }));
+}
+
+type Props = { exercise: Exercise };
+const { exercise } = Astro.props;
+---
+
+<ExerciseDetailPage {exercise} locale="en" />

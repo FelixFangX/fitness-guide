@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://bryllim.github.io/workout-guide/sitemap-index.xml
+# Deploy with SITE_URL and publish a sitemap URL that matches that domain.

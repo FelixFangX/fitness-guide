@@ -26,14 +26,17 @@
       "require": "./dist/index.cjs"
     },
     "./manifest.json": "./manifest.json",
+    "./locales/zh-CN.json": "./locales/zh-CN.json",
     "./assets/*": "./assets/*",
     "./package.json": "./package.json"
   },
   "files": [
     "assets",
     "dist",
+    "locales",
     "manifest.json",
     "README.md",
+    "README.zh-CN.md",
     "LICENSE",
     "LICENSE-ASSETS",
     "LICENSES.md",

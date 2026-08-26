@@ -1,27 +1,29 @@
 {
-  "name": "workout-guide-monorepo",
+  "name": "fitness-guide-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "Open-source exercise frames and integration guides by Bryl Lim.",
+  "description": "健身指南：默认中文的本地优先个人健身 App，内置中英切换与 SVG 动作库。",
   "type": "module",
+  "packageManager": "pnpm@11.21.0",
   "workspaces": [
     "apps/site",
     "packages/workout-guide"
   ],
   "scripts": {
-    "build": "npm run build -w @bryllim/workout-guide && npm run build -w workout-guide-site",
+    "build": "pnpm --filter @bryllim/workout-guide run build && pnpm --filter fitness-guide-site run build",
     "assets:vectorize": "node scripts/vectorize-assets.mjs",
     "catalog:import": "node scripts/import-catalog.mjs",
     "catalog:validate": "node scripts/validate-catalog.mjs",
-    "check": "npm run catalog:validate && npm run typecheck && npm run lint && npm test && npm run build",
-    "dev": "npm run dev -w workout-guide-site",
+    "check": "pnpm run catalog:validate && pnpm run typecheck && pnpm run lint && pnpm test && pnpm run build",
+    "dev": "pnpm --filter fitness-guide-site run dev",
     "lint": "eslint .",
-    "pack:dry": "npm pack -w @bryllim/workout-guide --dry-run",
+    "pack:dry": "pnpm --filter @bryllim/workout-guide pack --dry-run",
     "site:validate": "node scripts/validate-site.mjs",
+    "sites:build": "SITE_BASE=/ pnpm --filter @bryllim/workout-guide run build && SITE_BASE=/ pnpm --filter fitness-guide-site run build:sites && node scripts/prepare-sites-output.mjs",
     "test": "vitest run",
     "test:consumers": "node scripts/test-package-consumers.mjs",
     "test:e2e": "playwright test",
-    "typecheck": "npm run build -w @bryllim/workout-guide && npm run typecheck --workspaces --if-present"
+    "typecheck": "pnpm --filter @bryllim/workout-guide run build && pnpm --filter fitness-guide-site run typecheck"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

@@ -1,0 +1,78 @@
+---
+import CopyButton from '../CopyButton.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getMessages } from '../../lib/i18n';
+import type { SiteLocale } from '../../lib/locale';
+
+type Props = {
+  locale: SiteLocale;
+};
+
+const { locale } = Astro.props;
+const copy = getMessages(locale).guide;
+const install = 'pnpm add @bryllim/workout-guide';
+const api = locale === 'zh-CN'
+  ? `import {
+  exercises,
+  getExercise,
+  searchExercises,
+  getAssetUrl,
+} from '@bryllim/workout-guide';
+
+const pushUp = getExercise('push-up');
+const results = searchExercises('胸肌 自重');
+const imageUrl = getAssetUrl('push-up', 1);`
+  : `import {
+  exercises,
+  getExercise,
+  searchExercises,
+  getAssetUrl,
+} from '@bryllim/workout-guide';
+
+const pushUp = getExercise('push-up');
+const results = searchExercises('chest bodyweight');
+const imageUrl = getAssetUrl('push-up', 1);`;
+const direct = locale === 'zh-CN'
+  ? `import frame1 from '@bryllim/workout-guide/assets/push-up/frame-1.svg';
+
+export function ExerciseImage() {
+  return <img src={frame1} alt="俯卧撑起始位置" />;
+}`
+  : `import frame1 from '@bryllim/workout-guide/assets/push-up/frame-1.svg';
+
+export function ExerciseImage() {
+  return <img src={frame1} alt="Push-up starting position" />;
+}`;
+const manifest = `import manifest from '@bryllim/workout-guide/manifest.json';
+
+console.log(manifest.length); // 302`;
+const expo = locale === 'zh-CN'
+  ? `// React Native 打包器需要字面量 require() 路径。
+const pushUpFrames = [
+  require('@bryllim/workout-guide/assets/push-up/frame-1.svg'),
+  require('@bryllim/workout-guide/assets/push-up/frame-2.svg'),
+  require('@bryllim/workout-guide/assets/push-up/frame-3.svg'),
+];`
+  : `// React Native bundlers need literal require() paths.
+const pushUpFrames = [
+  require('@bryllim/workout-guide/assets/push-up/frame-1.svg'),
+  require('@bryllim/workout-guide/assets/push-up/frame-2.svg'),
+  require('@bryllim/workout-guide/assets/push-up/frame-3.svg'),
+];`;
+const cdn = 'https://cdn.jsdelivr.net/npm/@bryllim/workout-guide@1.0.0/assets/push-up/frame-1.svg';
+---
+
+<BaseLayout title={copy.title} description={copy.description} {locale} path="guide/">
+  <header class="page-intro page-shell"><div><p class="eyebrow">{copy.eyebrow}</p><h1>{copy.heading}</h1></div><p>{copy.summary}</p></header>
+  <div class="guide-layout page-shell section">
+    <nav class="guide-nav" aria-label={copy.navigation}><a href="#install">{copy.install}</a><a href="#api">{copy.api}</a><a href="#assets">{copy.assets}</a><a href="#native">{copy.native}</a><a href="#cdn">{copy.cdn}</a><a href="#license">{copy.license}</a></nav>
+    <div class="guide-content">
+      <section class="guide-section" id="install"><p class="eyebrow">01</p><h2>{copy.install}</h2><p>{copy.installBody}</p><div class="code-with-copy"><CopyButton text={install} {locale} /><div class="code-block" data-squircle data-radius="24"><pre tabindex="0"><code>{install}</code></pre></div></div></section>
+      <section class="guide-section" id="api"><p class="eyebrow">02</p><h2>{copy.api}</h2><p>{copy.apiBody}</p><div class="code-with-copy"><CopyButton text={api} {locale} /><div class="code-block" data-squircle data-radius="24"><pre tabindex="0"><code>{api}</code></pre></div></div><h3>{copy.rawManifest}</h3><div class="code-with-copy"><CopyButton text={manifest} {locale} /><div class="code-block" data-squircle data-radius="24"><pre tabindex="0"><code>{manifest}</code></pre></div></div></section>
+      <section class="guide-section" id="assets"><p class="eyebrow">03</p><h2>{copy.assets}</h2><p>{copy.assetsBody} <code>assets/&lt;slug&gt;/frame-&lt;1|2|3&gt;.svg</code>{copy.sentenceEnd}</p><div class="code-with-copy"><CopyButton text={direct} {locale} /><div class="code-block" data-squircle data-radius="24"><pre tabindex="0"><code>{direct}</code></pre></div></div></section>
+      <section class="guide-section" id="native"><p class="eyebrow">04</p><h2>{copy.native}</h2><p>{copy.nativeBody}</p><div class="code-with-copy"><CopyButton text={expo} {locale} /><div class="code-block" data-squircle data-radius="24"><pre tabindex="0"><code>{expo}</code></pre></div></div></section>
+      <section class="guide-section" id="cdn"><p class="eyebrow">05</p><h2>{copy.cdn}</h2><p>{copy.cdnBody}</p><div class="code-with-copy"><CopyButton text={cdn} {locale} /><div class="code-block" data-squircle data-radius="24"><pre tabindex="0"><code>{cdn}</code></pre></div></div></section>
+      <section class="guide-section" id="license"><p class="eyebrow">06</p><h2>{copy.license}</h2><p>{copy.licenseBody}</p><div class="guide-card" data-squircle data-radius="32"><p><strong>{copy.suggestedCredit}</strong></p><p>{copy.credit}</p></div></section>
+    </div>
+  </div>
+</BaseLayout>

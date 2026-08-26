@@ -1,0 +1,80 @@
+---
+import { exercises } from '@bryllim/workout-guide';
+
+import ExerciseCard from '../ExerciseCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getLocalizedExercise } from '../../lib/i18n';
+import type { SiteLocale } from '../../lib/locale';
+
+type Props = { locale: SiteLocale };
+
+const { locale } = Astro.props;
+const copy = locale === 'zh-CN'
+  ? { title: '动作库 — 健身指南', description: '按名称、器械、肌群和动作类型查找可替换动作。', eyebrow: '动作库', heading: '需要替换时，再来找动作。', summary: '按肌群和器械缩小范围。每个动作都带有三帧 SVG 示意，帮助你在训练前确认姿势。', search: '搜索动作', placeholder: '例如：俯卧撑、背部或自重', equipment: '器械', allEquipment: '全部器械', muscle: '主要肌群', allMuscles: '全部肌群', type: '动作类型', allTypes: '全部类型', noResults: '没有找到匹配的动作。', noResultsHint: '试试更宽泛的关键词，或清除筛选条件。', all: '显示全部 {count} 个动作', found: '找到 {count} 个动作' }
+  : { title: 'Movement library — Fitness Guide', description: 'Find movement alternatives by name, equipment, muscle, and exercise type.', eyebrow: 'Movement library', heading: 'Use the library when you need a swap.', summary: 'Narrow the list by muscle and equipment. Every movement includes three SVG frames to help you check the position before training.', search: 'Search movements', placeholder: 'For example: push-up, back, bodyweight', equipment: 'Equipment', allEquipment: 'All equipment', muscle: 'Primary muscle', allMuscles: 'All muscles', type: 'Movement type', allTypes: 'All types', noResults: 'No matching movements found.', noResultsHint: 'Try a broader term or clear a filter.', all: 'Showing all {count} movements', found: '{count} movements found' };
+const collator = new Intl.Collator(locale);
+const translateEquipment = (value: string) => getLocalizedExercise(exercises.find((exercise) => exercise.equipment === value)!, locale).equipment;
+const translateMuscle = (value: string) => getLocalizedExercise(exercises.find((exercise) => exercise.primaryMuscle === value)!, locale).primaryMuscle;
+const translateType = (value: string) => getLocalizedExercise(exercises.find((exercise) => exercise.exerciseType === value)!, locale).exerciseType;
+const equipment = [...new Set(exercises.map((exercise) => exercise.equipment))].map((value) => ({ value, label: translateEquipment(value) })).sort((a, b) => collator.compare(a.label, b.label));
+const muscles = [...new Set(exercises.map((exercise) => exercise.primaryMuscle))].map((value) => ({ value, label: translateMuscle(value) })).sort((a, b) => collator.compare(a.label, b.label));
+const types = [...new Set(exercises.map((exercise) => exercise.exerciseType))].map((value) => ({ value, label: translateType(value) })).sort((a, b) => collator.compare(a.label, b.label));
+---
+
+<BaseLayout title={copy.title} description={copy.description} {locale} path="exercises/">
+  <section class="app-shell library-page page-shell" aria-labelledby="library-title">
+    <header class="library-intro"><div><p class="eyebrow">{copy.eyebrow}</p><h1 id="library-title">{copy.heading}</h1></div><p>{copy.summary}</p></header>
+    <form class="filter-panel" data-exercise-filters role="search">
+      <label><span>{copy.search}</span><input type="search" name="q" placeholder={copy.placeholder} autocomplete="off" /></label>
+      <label><span>{copy.equipment}</span><select name="equipment"><option value="">{copy.allEquipment}</option>{equipment.map(({ value, label }) => <option value={value}>{label}</option>)}</select></label>
+      <label><span>{copy.muscle}</span><select name="muscle"><option value="">{copy.allMuscles}</option>{muscles.map(({ value, label }) => <option value={value}>{label}</option>)}</select></label>
+      <label><span>{copy.type}</span><select name="type"><option value="">{copy.allTypes}</option>{types.map(({ value, label }) => <option value={value}>{label}</option>)}</select></label>
+    </form>
+    <p class="result-meta" id="result-count" role="status" aria-live="polite" data-total={exercises.length} data-all={copy.all} data-found={copy.found}>{copy.all.replace('{count}', String(exercises.length))}</p>
+    <div class="exercise-grid" data-exercise-grid>{exercises.map((exercise) => <ExerciseCard {exercise} {locale} />)}</div>
+    <div class="empty-state" data-empty-state hidden><h2>{copy.noResults}</h2><p>{copy.noResultsHint}</p></div>
+  </section>
+  <script>
+    const form = document.querySelector<HTMLFormElement>('[data-exercise-filters]');
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-exercise-card]'));
+    const resultCount = document.querySelector<HTMLElement>('#result-count');
+    const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
+    const normalize = (value: string) => value.toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+    if (form) {
+      const params = new URLSearchParams(window.location.search);
+      for (const field of ['q', 'equipment', 'muscle', 'type']) {
+        const control = form.elements.namedItem(field) as HTMLInputElement | HTMLSelectElement | null;
+        if (control) control.value = params.get(field) ?? '';
+      }
+      const update = () => {
+        const data = new FormData(form);
+        const tokens = normalize(String(data.get('q') ?? '')).split(/\s+/).filter(Boolean);
+        const equipmentValue = String(data.get('equipment') ?? '');
+        const muscleValue = String(data.get('muscle') ?? '');
+        const typeValue = String(data.get('type') ?? '');
+        let visible = 0;
+        for (const card of cards) {
+          const searchable = normalize(card.dataset.search ?? '');
+          const matches = tokens.every((token) => searchable.includes(token)) && (!equipmentValue || card.dataset.equipment === equipmentValue) && (!muscleValue || card.dataset.muscle === muscleValue) && (!typeValue || card.dataset.type === typeValue);
+          card.hidden = !matches;
+          if (matches) visible += 1;
+        }
+        if (resultCount) {
+          const total = Number(resultCount.dataset.total ?? cards.length);
+          const template = visible === total ? resultCount.dataset.all : resultCount.dataset.found;
+          resultCount.textContent = template?.replace('{count}', String(visible)) ?? String(visible);
+        }
+        if (emptyState) emptyState.hidden = visible !== 0;
+        const nextParams = new URLSearchParams();
+        for (const field of ['q', 'equipment', 'muscle', 'type']) {
+          const value = String(data.get(field) ?? '').trim();
+          if (value) nextParams.set(field, value);
+        }
+        window.history.replaceState({}, '', nextParams.size ? `${window.location.pathname}?${nextParams}` : window.location.pathname);
+      };
+      form.addEventListener('input', update);
+      form.addEventListener('change', update);
+      update();
+    }
+  </script>
+</BaseLayout>
