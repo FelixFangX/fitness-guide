@@ -12,15 +12,18 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.21.0
+      - uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: npm
-      - run: npm ci
-      - run: npm run check
-      - run: npm run site:validate
-      - run: npm run pack:dry
-      - run: npm run test:consumers
-      - run: npx playwright install --with-deps chromium webkit
-      - run: npm run test:e2e
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run check
+      - run: pnpm run site:validate
+      - run: pnpm run pack:dry
+      - run: pnpm run test:consumers
+      - run: pnpm exec playwright install --with-deps chromium webkit
+      - run: pnpm run test:e2e
